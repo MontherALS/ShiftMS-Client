@@ -1,0 +1,5 @@
+1- make a moudle for edit groups 
+
+2- edit some styles and color
+
+3- add more content to navBar (logo, title ...)

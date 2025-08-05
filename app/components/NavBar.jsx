@@ -1,35 +1,32 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../Images/logo.png";
 export default function NavBar() {
+  const linkStyle =
+    "text-gray-600 font-semibold px-3 py-2 rounded-md hover:bg-blue-50 transition";
   return (
-    <nav className="mb-12">
-      <div className="flex justify-center space-x-8 bg-white rounded-lg shadow-md py-4 px-8 max-w-2xl mx-auto">
-        <Link
-          href="/"
-          className="text-blue-600 hover:text-blue-800 font-semibold px-4 py-2 rounded-md hover:bg-blue-50 transition-all"
-        >
+    <header className="bg-white shadow-sm rounded-xl py-4 px-6 max-w-6xl mx-auto mb-8 flex items-center justify-between">
+      <div className="flex justify-center items-center">
+        <Image src={logo} width={85} alt="logo" />
+        <h1 className="text-2xl font-bold text-gray-800">ShiftGroups</h1>
+      </div>
+      {/* Navigation Links */}
+      <nav className="flex gap-4">
+        <Link href="/" className={linkStyle}>
           Dashboard
         </Link>
-        <Link
-          href="/groups"
-          className="text-gray-600 hover:text-blue-600 font-semibold px-4 py-2 rounded-md hover:bg-blue-50 transition-all"
-        >
+        <Link href="/groups" className={linkStyle}>
           Groups
         </Link>
-        <Link
-          href="/add-employee"
-          className="text-gray-600 hover:text-blue-600 font-semibold px-4 py-2 rounded-md hover:bg-blue-50 transition-all"
-        >
+        <Link href="/add-employee" className={linkStyle}>
           Add Employee
         </Link>
-        <Link
-          href="/help"
-          className="text-gray-600 hover:text-blue-600 font-semibold px-4 py-2 rounded-md hover:bg-blue-50 transition-all"
-        >
+        <Link href="/help" className={linkStyle}>
           Help
         </Link>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }

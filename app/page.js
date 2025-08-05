@@ -1,24 +1,17 @@
-"use client";
-import { useState, useEffect } from "react";
+import React from "react";
 import NavBar from "./components/NavBar";
-import Header from "./components/Header";
+
 import CurrentGroups from "./components/CurrentGroups";
 import EmployesCards from "./components/EmployesCards";
 import NextGroup from "./components/NextGroup";
-
 export default function Home() {
-  // Dummy data for the dashboard
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      {/* Header with Company Branding */}
-      <Header />
-
+    <div className="min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] p-6">
       {/* Navigation */}
       <NavBar />
 
       {/* Main Content */}
-      <section className="max-w-6xl mx-auto">
+      <main className=" flex flex-col max-w-6xl gap-8 mx-auto">
         <CurrentGroups />
 
         {/* Next Shift Section */}
@@ -26,7 +19,7 @@ export default function Home() {
 
         {/* Current Employees Section */}
         <EmployesCards />
-      </section>
+      </main>
     </div>
   );
 }

@@ -1,0 +1,139 @@
+// components/AddGroupModal.jsx
+"use client";
+import React from "react";
+import { useState } from "react";
+export default function AddGroupModal({ isOpen, onClose }) {
+  if (!isOpen) return null;
+
+  //State's
+  const [groupForm, setGroupForm] = useState({
+    name: "",
+    workingDays: [],
+    workStart: "",
+    workEnd: "",
+  });
+
+  //logic
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    const updatedDays = checked
+      ? [...groupForm.workingDays, value]
+      : groupForm.workingDays.filter((day) => day !== value);
+
+    setGroupForm({
+      ...groupForm,
+      workingDays: updatedDays,
+    });
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setGroupForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e) => {
+    const res = await fetch("http://localhost:5000/groups", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(groupForm),
+    });
+    if (!res.ok) {
+      console.error("Failed to submit group form");
+      return;
+    }
+    const data = await res.json();
+    console.log("Group created successfully:", data);
+    onClose();
+  };
+  return (
+    <div className="fixed inset-0 flex items-center justify-center  bg-opacity- z-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+        <h2 className="text-2xl font-bold mb-6 text-center text-black ">
+          Add New Group
+        </h2>
+
+        <form className="space-y-4">
+          <div>
+            <label className="block text-gray-700 mb-1">Group Name</label>
+            <input
+              type="text"
+              name="name"
+              value={groupForm.name}
+              onChange={handleChange}
+              placeholder="e.g. Morning Shift A"
+              className="w-full border text-gray-500 rounded px-3 py-2"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 mb-1">Working Days</label>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Saturday",
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+              ].map((day) => (
+                <label key={day} className="inline-flex items-center">
+                  <input
+                    onChange={handleCheckboxChange}
+                    value={day}
+                    type="checkbox"
+                    className="form-checkbox text-blue-600"
+                  />
+                  <span className="ml-2 text-gray-700">{day}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <h1 className="text-xl text-black mt-5">Working houres</h1>
+          <div>
+            <label className="block text-gray-700 mb-1">From</label>
+
+            <input
+              type="time"
+              value={groupForm.workStart}
+              name="workStart"
+              onChange={handleChange}
+              className="w-full border text-gray-500  rounded px-3 py-2"
+            />
+            <label className="block mt-2 text-gray-700 mb-1">To</label>
+
+            <input
+              type="time"
+              value={groupForm.workEnd}
+              name="workEnd"
+              onChange={handleChange}
+              className="w-full border text-gray-500  rounded px-3 py-2"
+            />
+          </div>
+
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-800 hover:scale-105 duration-500 cursor-pointer "
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => console.log(groupForm)}
+              type="button"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hover:scale-105 duration-500 cursor-pointer"
+            >
+              Save Group
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
