@@ -14,7 +14,7 @@ export default function NavBar() {
       </div>
       {/* Navigation Links */}
       <nav className="flex gap-4">
-        <Link href="/" className={linkStyle}>
+        <Link href="/dashboard" className={linkStyle}>
           Dashboard
         </Link>
         <Link href="/groups" className={linkStyle}>
@@ -26,6 +26,20 @@ export default function NavBar() {
         <Link href="/help" className={linkStyle}>
           Help
         </Link>
+        <button
+          className="text-gray-100 bg-orange-700 font-semibold px-3 py-2 rounded-2xl hover:bg-orange-800 duration-300 transition cursor-pointer"
+          onClick={() => {
+            const alert = window.confirm(
+              "Are you sure you want to logout? You will be redirected to the login page."
+            );
+            if (alert) {
+              localStorage.removeItem("token");
+              window.location.href = "/login";
+            } else return null;
+          }}
+        >
+          Logout
+        </button>
       </nav>
     </header>
   );

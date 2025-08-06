@@ -1,25 +1,27 @@
-import React from "react";
-import NavBar from "./components/NavBar";
+"use client";
+import Link from "next/link";
 
-import CurrentGroups from "./components/CurrentGroups";
-import EmployesCards from "./components/EmployesCards";
-import NextGroup from "./components/NextGroup";
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] p-6">
-      {/* Navigation */}
-      <NavBar />
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center px-6">
+      <div className="max-w-3xl text-center space-y-6">
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-800">
+          Welcome to <span className="text-blue-600">ShiftGroups</span>
+        </h1>
 
-      {/* Main Content */}
-      <main className=" flex flex-col max-w-6xl gap-8 mx-auto">
-        <CurrentGroups />
+        <p className="text-lg sm:text-xl text-gray-600">
+          A smart platform for managing employee shifts and group schedules with
+          ease and clarity. Save time, stay organized, and keep everything in
+          one place.
+        </p>
 
-        {/* Next Shift Section */}
-        <NextGroup />
-
-        {/* Current Employees Section */}
-        <EmployesCards />
-      </main>
-    </div>
+        <Link
+          href="/login"
+          className="inline-block mt-4 bg-blue-600 text-white text-lg font-medium px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          Get Started
+        </Link>
+      </div>
+    </main>
   );
 }
