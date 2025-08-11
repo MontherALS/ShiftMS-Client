@@ -7,6 +7,9 @@ import CurrentGroups from "../components/CurrentGroups";
 import EmployesCards from "../components/EmployesCards";
 import NextGroup from "../components/NextGroup";
 export default function DashboardPage() {
+  //TODO Add fetch for current groups and employees
+  //TODO Add time calculation for next shift
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {

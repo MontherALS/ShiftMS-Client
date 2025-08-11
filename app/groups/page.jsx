@@ -1,12 +1,29 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import NavBar from "../components/NavBar";
 import AddGroupModal from "../components/AddGroupModal";
-import { dummyGroups } from "@/util/DUMMY_DATA";
 
 export default function GroupsPage() {
-  const [groups, setGroups] = useState(dummyGroups);
+  const [groups, setGroups] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/groups");
+        if (!res.ok) {
+          console.error("Failed to fetch groups");
+          return;
+        }
+        const data = await res.json();
+        setGroups(data);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+    fetchGroups();
+  }, []);
 
   return (
     <>
@@ -62,15 +79,17 @@ export default function GroupsPage() {
                     <td className="px-4 py-2 text-left font-medium text-gray-800">
                       {group.name} <br />
                       <span className="text-sm text-gray-500">
-                        Admin: {group.admin}
+                        Admin: {group.supervisor || "N/A"}
                       </span>
                     </td>
-                    {["sat", "sun", "mon", "tue", "wed", "thu", "fri"].map(
+                    {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map(
                       (day) => (
                         <td key={day} className="px-4 py-2 text-gray-700">
-                          {group.schedule?.[day]
-                            ? `${group.schedule[day].start} - ${group.schedule[day].end}`
-                            : "Off"}
+                          {group.workingDays.includes(day)
+                            ? group.shiftStart && group.shiftEnd
+                              ? `${group.shiftStart} - ${group.shiftEnd}`
+                              : "-"
+                            : "-"}
                         </td>
                       )
                     )}
@@ -91,10 +110,12 @@ export default function GroupsPage() {
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">
                     {group.name}
                   </h2>
-                  <p className="text-lg text-gray-600">Admin: {group.admin}</p>
+                  <p className="text-lg text-gray-600">
+                    Admin: {group.supervisor || "N/A"}
+                  </p>
                 </div>
                 <button className="bg-gray-100 hover:bg-gray-200 border border-gray-300 px-6 py-2 rounded-lg font-medium text-gray-700 transition-colors duration-200">
-                  Edit
+                  <Link href={`/groups/edit/${group._id}`}>Edit</Link>
                 </button>
               </div>
             ))}
