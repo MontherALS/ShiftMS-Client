@@ -3,15 +3,55 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 export default function EmployeePage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: "",
-    id: "",
-    email: "",
     phone: "",
+    email: "",
+    group: "",
   });
-
+  const [groups, setGroups] = useState([]);
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/groups`);
+        const data = await res.json();
+        setGroups(data);
+        console.log("Fetched groups:", data);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+    fetchGroups();
+  }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:5000/add-employee", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    if (!res) {
+      console.error("Failed to add employee");
+      return;
+    }
+    const data = await res.json();
+    console.log("Employee added:", data);
+    router.push("/dashboard");
+  };
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <NavBar />
@@ -20,18 +60,20 @@ export default function EmployeePage() {
           Add New Employee
         </h1>
 
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
-              htmlFor="firstName"
+              htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Name
             </label>
             <input
               type="text"
-              id="firstName"
-              name="firstName"
+              id="name"
+              value={formData.name || ""}
+              onChange={handleChange}
+              name="name"
               className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter a name"
               required
@@ -43,14 +85,16 @@ export default function EmployeePage() {
               htmlFor="lastName"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              ID
+              Phone
             </label>
             <input
               type="text"
               id="lastName"
-              name="lastName"
+              value={formData.phone || ""}
+              onChange={handleChange}
+              name="phone"
               className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter ID"
+              placeholder="+966xxxxxxxxx"
               required
             />
           </div>
@@ -65,6 +109,8 @@ export default function EmployeePage() {
             <input
               type="email"
               id="email"
+              value={formData.email || ""}
+              onChange={handleChange}
               name="email"
               className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter email address"
@@ -79,13 +125,20 @@ export default function EmployeePage() {
             >
               Group
             </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              className="w-full px-3 py-2 border border-gray-300 text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Select a group"
-            />
+            <select
+              id="group"
+              onChange={handleChange}
+              name="group"
+              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="">Select a group</option>
+              {groups.map((group) => (
+                <option key={group._id} value={group._id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="pt-4">

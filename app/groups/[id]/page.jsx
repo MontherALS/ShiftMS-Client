@@ -205,11 +205,6 @@ export default function EditGroupPage() {
                         <h3 className="truncate text-sm font-semibold text-gray-900">
                           {e.name || "—"}
                         </h3>
-                        {e.admin ? (
-                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 border border-amber-100">
-                            Admin
-                          </span>
-                        ) : null}
                       </div>
                       <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-600">
                         <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-blue-700 border border-blue-100">
@@ -225,7 +220,7 @@ export default function EditGroupPage() {
                             >
                               <path d="M2 3.5A1.5 1.5 0 013.5 2h1.337c.6 0 1.12.42 1.235 1.01l.488 2.44a1.25 1.25 0 01-.72 1.385l-1.03.412a10.5 10.5 0 005.142 5.142l.412-1.03a1.25 1.25 0 011.385-.72l2.44.488c.59.116 1.01.635 1.01 1.235V16.5A1.5 1.5 0 0114.5 18h-1A11.5 11.5 0 012 7.5v-4z" />
                             </svg>
-                            {e.phoneNumber || e.phone}
+                            <a href={`tel:${e.phone}`}>{e.phone}</a>
                           </span>
                         ) : null}
                       </div>
