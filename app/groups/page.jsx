@@ -23,7 +23,7 @@ export default function GroupsPage() {
       }
     };
     fetchGroups();
-  }, []);
+  }, [isModalOpen]);
 
   return (
     <>
@@ -114,9 +114,13 @@ export default function GroupsPage() {
                     Admin: {group.supervisor || "N/A"}
                   </p>
                 </div>
-                <button className="bg-gray-100 hover:bg-gray-200 border border-gray-300 px-6 py-2 rounded-lg font-medium text-gray-700 transition-colors duration-200">
-                  <Link href={`/groups/edit/${group._id}`}>Edit</Link>
-                </button>
+
+                <Link
+                  className="bg-gray-100 hover:bg-gray-200 border border-gray-300 px-6 py-2 rounded-lg font-medium text-gray-700 transition-colors duration-200"
+                  href={`/groups/${group._id}`}
+                >
+                  Details
+                </Link>
               </div>
             ))}
           </div>

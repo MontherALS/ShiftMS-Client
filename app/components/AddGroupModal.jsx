@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-export default function AddGroupModal({ isOpen, onClose }) {
+export default function AddGroupModal({ isOpen, onClose, groupData }) {
   if (!isOpen) return null;
 
   //State's
