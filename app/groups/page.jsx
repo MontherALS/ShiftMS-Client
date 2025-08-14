@@ -17,6 +17,7 @@ export default function GroupsPage() {
           return;
         }
         const data = await res.json();
+        console.log("Fetched groups:", data);
         setGroups(data);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -79,7 +80,7 @@ export default function GroupsPage() {
                     <td className="px-4 py-2 text-left font-medium text-gray-800">
                       {group.name} <br />
                       <span className="text-sm text-gray-500">
-                        Admin: {group.supervisor || "N/A"}
+                        Admin: {group.supervisor.name || "N/A"}
                       </span>
                     </td>
                     {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map(
@@ -111,7 +112,7 @@ export default function GroupsPage() {
                     {group.name}
                   </h2>
                   <p className="text-lg text-gray-600">
-                    Admin: {group.supervisor || "N/A"}
+                    Admin: {group.supervisor ? group.supervisor.name : "N/A"}
                   </p>
                 </div>
 

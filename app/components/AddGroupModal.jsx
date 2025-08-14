@@ -1,16 +1,27 @@
 "use client";
 import React from "react";
-import { useState } from "react";
-export default function AddGroupModal({ isOpen, onClose, groupData }) {
-  if (!isOpen) return null;
-
+import { useState, useEffect } from "react";
+export default function AddGroupModal({ isOpen, onClose }) {
   //State's
   const [groupForm, setGroupForm] = useState({
     name: "",
     workingDays: [],
     shiftStart: "",
     shiftEnd: "",
+    supervisor: "",
   });
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      const res = await fetch("http://localhost:5000/employees");
+      if (!res) return console.error("Failed to fetch employees");
+      const data = await res.json();
+      setEmployees(data);
+      console.log("Fetched employees:", data);
+    };
+    getEmployees();
+  }, []);
 
   //logic
   const handleCheckboxChange = (e) => {
@@ -24,6 +35,7 @@ export default function AddGroupModal({ isOpen, onClose, groupData }) {
       ...groupForm,
       workingDays: updatedDays,
     });
+    console.log("Updated working days:", groupForm);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,10 +57,17 @@ export default function AddGroupModal({ isOpen, onClose, groupData }) {
       console.error("Failed to submit group form");
       return;
     }
-    const data = await res.json();
-    console.log("Group created successfully:", data);
+    setGroupForm({
+      name: "",
+      workingDays: [],
+      shiftStart: "",
+      shiftEnd: "",
+      supervisor: "",
+    });
     onClose();
   };
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 flex items-center justify-center  bg-opacity- z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
@@ -68,7 +87,22 @@ export default function AddGroupModal({ isOpen, onClose, groupData }) {
               className="w-full border text-gray-500 rounded px-3 py-2"
             />
           </div>
-
+          <div>
+            <label className="block text-gray-700 mb-1">Supervisor</label>
+            <select
+              type="text"
+              name="supervisor"
+              onChange={handleChange}
+              className="w-full border text-gray-500 rounded px-3 py-2"
+            >
+              <option value="">Select Supervisor</option>
+              {employees.map((employee) => (
+                <option key={employee._id} value={employee._id}>
+                  {employee.name} - {employee.phone}
+                </option>
+              ))}
+            </select>
+          </div>
           <div>
             <label className="block text-gray-700 mb-1">Working Days</label>
             <div className="flex flex-wrap gap-2">
