@@ -10,7 +10,9 @@ export default function NavBar() {
     <header className="bg-white shadow-sm rounded-xl py-4 px-6 max-w-6xl mx-auto mb-8 flex items-center justify-between">
       <div className="flex justify-center items-center">
         <Image src={logo} width={85} alt="logo" />
-        <h1 className="text-2xl font-bold text-gray-800">ShiftGroups</h1>
+        <h1 className="text-2xl font-bold text-gray-800">
+          Shift Management System
+        </h1>
       </div>
       {/* Navigation Links */}
       <nav className="flex gap-4">
@@ -20,25 +22,25 @@ export default function NavBar() {
         <Link href="/groups" className={linkStyle}>
           Groups
         </Link>
-        <Link href="/add-employee" className={linkStyle}>
-          Add Employee
+        <Link href="/manage-employees" className={linkStyle}>
+          Manage Employees
         </Link>
         <Link href="/help" className={linkStyle}>
           Help
         </Link>
         <button
-          className="text-gray-100 bg-orange-700 font-semibold px-3 py-2 rounded-2xl hover:bg-orange-800 duration-300 transition cursor-pointer"
+          className="px-4 py-2 text-white text-sm bg-orange-600 font-semibold rounded-full shadow-sm hover:bg-orange-700 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1"
           onClick={() => {
             const alert = window.confirm(
               "Are you sure you want to logout? You will be redirected to the login page."
             );
             if (alert) {
               localStorage.removeItem("token");
-              window.location.href = "/login";
+              window.location.href = "/";
             } else return null;
           }}
         >
-          Logout
+          logout
         </button>
       </nav>
     </header>

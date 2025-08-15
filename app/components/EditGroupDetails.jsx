@@ -86,7 +86,7 @@ export default function EditGroupDetails({
                 name="supervisor"
                 onChange={handleChange}
                 type="text"
-                placeholder={group ? group.supervisor.name : "---"}
+                placeholder={group ? group.supervisor?.name : "---"}
                 className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-600 focus:outline-none"
               >
                 <option value={formData?.supervisor_id || ""}>

@@ -90,7 +90,7 @@ export default function EditGroupPage() {
               <div className="space-y-2">
                 <div className="text-sm text-gray-500">Supervisor</div>
                 <div className="text-gray-900 font-medium">
-                  {group?.supervisor.name || "—"}
+                  {group?.supervisor?.name || "—"}
                 </div>
                 <span className="text-sm text-gray-500 flex gap-1 items-center">
                   {" "}
@@ -105,9 +105,9 @@ export default function EditGroupPage() {
                   <span className="text-gray-600">
                     <a
                       className="hover:underline"
-                      href={`tel:${group?.supervisor.phone}`}
+                      href={`tel:${group?.supervisor?.phone || ""}`}
                     >
-                      {group?.supervisor.phone || "—"}
+                      {group?.supervisor?.phone || "N/A"}
                     </a>
                   </span>
                 </span>
@@ -186,7 +186,7 @@ export default function EditGroupPage() {
               </p>
             </div>
             <Link
-              href="/add-employee"
+              href={`/groups/${id}/edit`}
               className="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 text-sm"
             >
               Add Employee

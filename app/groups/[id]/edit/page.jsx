@@ -36,10 +36,13 @@ export default function EditGroupPage() {
       setGroup(data);
       setFormData({
         name: data?.name || "",
-        supervisor: data?.supervisor._id || "",
+        supervisor: data?.supervisor?._id || "",
         shiftStart: data?.shiftStart || "",
         shiftEnd: data?.shiftEnd || "",
         workingDays: Array.isArray(data?.workingDays) ? data.workingDays : [],
+        employees: Array.isArray(data?.employees)
+          ? data.employees.map((employee) => employee._id)
+          : [],
       });
     };
     const fetchedEmployees = async () => {
@@ -105,7 +108,7 @@ export default function EditGroupPage() {
         console.error("Failed to update group");
         return;
       }
-      router.push("/groups");
+      router.push(`/groups/${id}`);
     } catch (error) {
       console.error("Error updating group:", error);
     }
@@ -170,7 +173,6 @@ export default function EditGroupPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <EditGroupDetails {...props} />
-      {/* Add Members */}
       <AddMembers {...props} />
     </main>
   );

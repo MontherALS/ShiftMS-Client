@@ -3,6 +3,7 @@ import React from "react";
 export default function AddMembers({
   group,
   employees,
+  formData,
   handleCheckboxChange,
   handleDeleteMember,
 }) {
@@ -13,7 +14,6 @@ export default function AddMembers({
           <div className="px-6 py-4 flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">Add Members</h3>
           </div>
-
           <div className="border-t border-gray-100 max-h-80 overflow-y-auto divide-y divide-gray-100">
             {employees.length > 0 ? (
               employees.map((employee) => (
@@ -26,6 +26,11 @@ export default function AddMembers({
                       type="checkbox"
                       name="employees"
                       value={employee._id}
+                      checked={
+                        formData
+                          ? formData.employees.includes(employee._id)
+                          : false
+                      }
                       onChange={handleCheckboxChange}
                       className="h-4 w-4 rounded border-gray-300 text-blue-600"
                     />

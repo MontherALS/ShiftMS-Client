@@ -80,7 +80,7 @@ export default function GroupsPage() {
                     <td className="px-4 py-2 text-left font-medium text-gray-800">
                       {group.name} <br />
                       <span className="text-sm text-gray-500">
-                        Admin: {group.supervisor.name || "N/A"}
+                        Admin: {group?.supervisor?.name || "N/A"}
                       </span>
                     </td>
                     {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map(
