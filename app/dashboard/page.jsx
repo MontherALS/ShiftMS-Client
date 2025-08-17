@@ -6,19 +6,43 @@ import NavBar from "../components/NavBar";
 // import CurrentGroups from "../components/CurrentGroups";
 // import EmployesCards from "../components/EmployesCards";
 // import NextGroup from "../components/NextGroup";
+import Countdown from "react-countdown";
 import { dummyEmployees } from "@/util/DUMMY_DATA";
 
-export default function DashboardPage() {
-  //TODO Add fetch for current groups and employees
-  //TODO Add time calculation for next shift
-  const [groups, setGroups] = useState([]);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      window.location.href = "/login";
-      return null;
+function toToday(hhmm) {
+  const [hours, minutes] = hhmm.split(":").map(Number);
+  const today = new Date();
+  today.setHours(hours, minutes, 0, 0);
+  return today;
+}
+function normalizeShift(shift) {
+  const start = toToday(shift.shiftStart);
+  const end = toToday(shift.shiftEnd);
+
+  if (end < start) end.setDate(end.getDate() + 1); //overnight
+  return { ...shift, _start: start, _end: end };
+}
+
+function getCurrentAndNextShift(shifts, now) {
+  const sortedShift = (Array.isArray(shifts) ? shifts : [])
+    .map((s) => normalizeShift(s))
+    .sort((a, b) => a._start - b._start);
+
+  for (let i = 0; i < sortedShift.length; i++) {
+    const currentS = sortedShift[i];
+
+    if (now >= currentS._start && now < currentS._end) {
+      return { current: currentS, next: sortedShift[i + 1] || null };
     }
-  }, []);
+  }
+  const next = sortedShift.find((s) => s._start > now) || null;
+  return { current: null, next: next };
+}
+
+export default function DashboardPage() {
+  const [now, setNow] = useState(new Date());
+
+  const [shifts, setShifts] = useState([]);
   useEffect(() => {
     const fetchGroups = async () => {
       const res = await fetch(`http://localhost:5000/groups`);
@@ -29,11 +53,18 @@ export default function DashboardPage() {
       const data = await res.json();
       console.log(data);
 
-      setGroups(data);
+      setShifts(data);
     };
     fetchGroups();
   }, []);
 
+  // update time every second
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t); // تنظيف
+  }, []);
+  const { current, next } = getCurrentAndNextShift(shifts, now);
+  if (current && next) console.log(current);
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 p-6">
       {/* Navigation */}
@@ -53,52 +84,61 @@ export default function DashboardPage() {
             {/* Group A */}
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <h2 className="text-lg font-semibold text-gray-800">Group A</h2>
+              <h2 className="text-lg font-semibold text-gray-800">
+                {current?.name || "N/D"}
+              </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="rounded-md bg-gradient-to-tl from-green-600 to-green-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Started</div>
-                <div className="mt-1 text-lg font-semibold">8:00 AM</div>
+                <div className="mt-1 text-lg font-semibold">
+                  {current?.shiftStart || "N/D"}
+                </div>
               </div>
               <div className="rounded-md bg-gradient-to-tl from-orange-500 to-orange-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Ends</div>
-                <div className="mt-1 text-lg font-semibold">2:00 PM</div>
+                <div className="mt-1 text-lg font-semibold">
+                  {" "}
+                  {current?.shiftEnd || "N/D"}
+                </div>
               </div>
               <div className="rounded-md bg-gradient-to-tl from-cyan-600 to-cyan-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Remaining</div>
-                <div className="mt-1 text-lg font-semibold">2h 30m</div>
-              </div>
-            </div>
-
-            {/* Group B */}
-            <div className="flex items-center mt-6 gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <h2 className="text-lg font-semibold text-gray-800">Group B</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-md bg-gradient-to-tl from-green-600 to-green-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
-                <div className="text-xs uppercase font-medium">Started</div>
-                <div className="mt-1 text-lg font-semibold">8:00 AM</div>
-              </div>
-              <div className="rounded-md bg-gradient-to-tl from-orange-500 to-orange-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
-                <div className="text-xs uppercase font-medium">Ends</div>
-                <div className="mt-1 text-lg font-semibold">2:00 PM</div>
-              </div>
-              <div className="rounded-md bg-gradient-to-tl from-cyan-600 to-cyan-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
-                <div className="text-xs uppercase font-medium">Remaining</div>
-                <div className="mt-1 text-lg font-semibold">2h 30m</div>
+                <div className="mt-1 text-lg font-semibold">
+                  {current ? (
+                    <Countdown
+                      date={current._end}
+                      renderer={({ hours, minutes, seconds, completed }) =>
+                        completed ? (
+                          <span className="text-red-500">Shift Ended</span>
+                        ) : (
+                          <span className="text-white font-bold">
+                            {hours}h {minutes}m {seconds}s
+                          </span>
+                        )
+                      }
+                    />
+                  ) : (
+                    <span>N/D</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Next Shift */}
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
+            <h1 className="text-lg font-semibold text-gray-800">
+              Current Shifts
+            </h1>
+            <hr className="my-4" />
+
+            {/* Group A */}
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <h2 className="text-lg font-semibold text-gray-800">
-                Next Shift
+                {next?.name || "N/D"}
               </h2>
-              <span className="text-sm text-gray-500">Group C</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-md bg-gradient-to-tl from-slate-300/50 to-slate-200/50 p-4 shadow hover:scale-105 hover:shadow-lg transition">
@@ -106,7 +146,7 @@ export default function DashboardPage() {
                   Starts
                 </div>
                 <div className="mt-1 text-lg text-gray-800 font-semibold">
-                  4:00 PM
+                  {next?.shiftStart || "N/D"}
                 </div>
               </div>
               <div className="rounded-md bg-gradient-to-tl from-slate-300/50 to-slate-200/50 p-4 shadow hover:scale-105 hover:shadow-lg transition">
@@ -114,7 +154,7 @@ export default function DashboardPage() {
                   Ends
                 </div>
                 <div className="mt-1 text-lg text-gray-800 font-semibold">
-                  10:00 PM
+                  {next?.shiftEnd || "N/D"}
                 </div>
               </div>
             </div>

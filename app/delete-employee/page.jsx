@@ -13,6 +13,7 @@ export default function DeleteEmployeePage() {
     };
     fetchEmployees();
   }, []);
+
   const handleDelete = async (e) => {
     const id = e.target.name;
     console.log("Deleting employee with ID:", id);

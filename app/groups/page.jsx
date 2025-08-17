@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import NavBar from "../components/NavBar";
@@ -17,7 +18,6 @@ export default function GroupsPage() {
           return;
         }
         const data = await res.json();
-        console.log("Fetched groups:", data);
         setGroups(data);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -28,13 +28,11 @@ export default function GroupsPage() {
 
   return (
     <>
-      {/* Modal */}
       <AddGroupModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
 
-      {/* Main Page Content */}
       <div
         className={`min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] p-6 transition-all duration-300 ${
           isModalOpen
@@ -45,7 +43,6 @@ export default function GroupsPage() {
         <NavBar />
 
         <div className="max-w-6xl mx-auto space-y-10">
-          {/* Page Header */}
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
             <h1 className="text-4xl font-bold text-gray-800 text-center sm:text-left">
               Group Schedule Overview
@@ -112,7 +109,8 @@ export default function GroupsPage() {
                     {group.name}
                   </h2>
                   <p className="text-lg text-gray-600">
-                    Admin: {group.supervisor ? group.supervisor.name : "N/A"}
+                    Supervisor:{" "}
+                    {group.supervisor ? group.supervisor.name : "N/A"}
                   </p>
                 </div>
 
