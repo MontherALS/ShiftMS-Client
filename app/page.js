@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/app/Images/logo.png";
+import logo from "@/public/Images/logo.png";
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-bl from-blue-50 to-indigo-100 flex items-center justify-center px-6">

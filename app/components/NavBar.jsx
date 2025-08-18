@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../Images/logo.png";
+import logo from "@/public/Images/logo.png";
 export default function NavBar() {
   const linkStyle =
     "text-gray-600 font-semibold px-3 py-2 rounded-md hover:bg-blue-50 transition";

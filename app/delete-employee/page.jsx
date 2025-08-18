@@ -16,7 +16,11 @@ export default function DeleteEmployeePage() {
 
   const handleDelete = async (e) => {
     const id = e.target.name;
-    console.log("Deleting employee with ID:", id);
+    const confirm = window.confirm(
+      "Are you sure you want to delete this employee with ID:",
+      id
+    );
+    if (!confirm) return;
     const res = await fetch(`http://localhost:5000/employees/${id}`, {
       method: "DELETE",
     });
@@ -29,7 +33,6 @@ export default function DeleteEmployeePage() {
     setEmployees((prev) => prev.filter((employee) => employee.id !== id));
   };
 
-  //! add a loading page
   if (!employees) return <div>Loading...</div>;
 
   return (

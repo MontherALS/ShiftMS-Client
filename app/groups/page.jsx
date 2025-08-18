@@ -7,6 +7,7 @@ import AddGroupModal from "../components/AddGroupModal";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
