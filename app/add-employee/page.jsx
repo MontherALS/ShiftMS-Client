@@ -15,10 +15,16 @@ export default function EmployeePage() {
     group: null,
   });
   const [groups, setGroups] = useState([]);
+  const [message, setMessage] = useState("");
   useEffect(() => {
     const fetchGroups = async () => {
       try {
         const res = await fetch(`http://localhost:5000/groups`);
+        if (!res.ok) {
+          const errorData = await res.json();
+          setMessage(errorData.message);
+          return;
+        }
         const data = await res.json();
         setGroups(data);
         console.log("Fetched groups:", data);
@@ -44,8 +50,9 @@ export default function EmployeePage() {
       },
       body: JSON.stringify(formData),
     });
-    if (!res) {
-      console.error("Failed to add employee");
+    if (!res.ok) {
+      const errorData = await res.json();
+      setMessage(errorData.message);
       return;
     }
     const data = await res.json();
@@ -59,7 +66,7 @@ export default function EmployeePage() {
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Add New Employee
         </h1>
-
+        <span className="text-red-500">{message}</span>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label

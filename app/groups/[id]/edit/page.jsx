@@ -7,6 +7,7 @@ import EditGroupDetails from "@/app/components/EditGroupDetails";
 export default function EditGroupPage() {
   const { id } = useParams();
   const router = useRouter();
+
   const [group, setGroup] = useState({
     name: "",
     workingDays: [],
@@ -15,24 +16,30 @@ export default function EditGroupPage() {
     supervisor: "",
     employees: [],
   });
+
   const [formData, setFormData] = useState({
     name: "",
     workingDays: [],
     shiftStart: "",
     shiftEnd: "",
-    supervisor: "",
+    supervisor: null,
     employees: [],
   });
   const [employees, setEmployees] = useState([]);
+
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
     const fetchGroupData = async () => {
       const res = await fetch(`http://localhost:5000/groups/${id}`);
 
       if (!res.ok) {
-        throw new Error("Failed to fetch group data");
+        const errorData = await res.json();
+        setMessage(errorData.message);
+        return;
       }
       const data = await res.json();
-      console.log("Fetched group data:", data);
+
       setGroup(data);
       setFormData({
         name: data?.name || "",
@@ -45,9 +52,15 @@ export default function EditGroupPage() {
           : [],
       });
     };
+
     const fetchedEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
-      if (!res.ok) return console.error("Failed to fetch employees");
+      if (!res.ok) {
+        const errorData = await res.json();
+        setMessage(errorData.message);
+        return;
+      }
+
       const data = await res.json();
       setEmployees(data);
     };
@@ -62,7 +75,6 @@ export default function EditGroupPage() {
       ...(prev || {}),
       [name]: value,
     }));
-    console.log("Form data updated:", { ...formData, [name]: value });
   }
   function handleCheckboxChange(e) {
     const { checked, value, name } = e.target;
@@ -91,11 +103,9 @@ export default function EditGroupPage() {
         employees: updatedEmployees,
       }));
     }
-    console.log(formData);
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
     try {
       const res = await fetch(`http://localhost:5000/groups/${id}`, {
         method: "PUT",
@@ -105,7 +115,8 @@ export default function EditGroupPage() {
         body: JSON.stringify(formData),
       });
       if (!res.ok) {
-        console.error("Failed to update group");
+        const errorData = await res.json();
+        setMessage(errorData.message);
         return;
       }
       router.push(`/groups/${id}`);
@@ -122,43 +133,24 @@ export default function EditGroupPage() {
     const res = await fetch(`http://localhost:5000/groups/${id}`, {
       method: "DELETE",
     });
-    if (res.ok) {
-      const data = await res.json();
-      console.log("Group deleted", data.msg);
-      router.push("/groups");
-    } else {
-      console.error("Failed to delete group");
+    if (!res.ok) {
+      const errorData = await res.json();
+      setMessage(errorData.message);
+      return;
     }
+    const data = await res.json();
+    router.push("/groups");
   };
-  const handleDeleteMember = async (e) => {
-    const ID = e.target.id;
-    console.log(ID);
-    const alert = window.confirm(
-      `Are you sure you want to delete this group member ?`
-    );
-    if (!alert) return;
-    const res = await fetch(
-      `http://localhost:5000/groups/${id}/remove-member`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ employeeId: ID }),
-      }
-    );
-    if (!res) console.error(`error happend ${err}`);
-    router.push(`/groups/${id}`);
-  };
+
   const props = {
     formData,
     employees,
     group,
+    message,
     handleChange,
     handleCheckboxChange,
     handleSubmit,
     handleDeleteGroup,
-    handleDeleteMember,
   };
   if (!group) {
     return (

@@ -62,7 +62,6 @@ export default function DashboardPage() {
     const fetchGroups = async () => {
       const res = await fetch(`http://localhost:5000/groups`);
       if (!res.ok) {
-        console.error("Cant fetch groups", res.statusText);
         return;
       }
       const data = await res.json();
@@ -101,8 +100,17 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto space-y-6">
+        <span className="text-gray-600 text-lg font-medium">
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
+
         {/* Shifts: Current and Next */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Current Shift */}
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
             <h1 className="text-lg font-semibold text-gray-800">
@@ -174,7 +182,7 @@ export default function DashboardPage() {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No current shifts now</p>
+              <p className="text-gray-500">No current shifts </p>
             )}
           </div>
 
@@ -278,7 +286,9 @@ export default function DashboardPage() {
                 </li>
               ))
             ) : (
-              <p className="text-gray-500">No employees working now</p>
+              <p className="text-gray-500">
+                No employees working at the moment
+              </p>
             )}
           </ul>
         </section>

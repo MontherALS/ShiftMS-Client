@@ -7,6 +7,7 @@ export default function EditGroupDetails({
   formData,
   group,
   employees,
+  message,
 }) {
   return (
     <div className="max-w-6xl mx-auto px-4">
@@ -51,7 +52,7 @@ export default function EditGroupDetails({
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Group Details
           </h2>
-
+          <span className="text-red-500 mb-4">{message}</span>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Group Name */}
             <div>

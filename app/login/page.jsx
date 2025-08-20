@@ -6,7 +6,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-
+  const [message, setMessage] = useState("");
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -23,7 +23,11 @@ export default function LoginPage() {
       },
       body: JSON.stringify(formData),
     });
-    if (!res.ok) return console.log("Login failed");
+    if (!res.ok) {
+      const errorData = await res.json();
+      setMessage(errorData.message);
+      return;
+    }
 
     const data = await res.json();
 
@@ -36,6 +40,7 @@ export default function LoginPage() {
     <section className="bg-gradient-to-bl from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center mb-6">
+          <span className="text-red-500">{message}</span>
           <h1 className="text-2xl font-bold text-gray-800">Welcome Back</h1>
           <p className="text-gray-600 mt-2">Login to accsees the service</p>
         </div>

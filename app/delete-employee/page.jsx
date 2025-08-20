@@ -28,9 +28,10 @@ export default function DeleteEmployeePage() {
       console.error("Failed to delete employee", res.statusText);
       return;
     }
-    const data = await res.json();
-    console.log("Employee deleted:", data);
-    setEmployees((prev) => prev.filter((employee) => employee.id !== id));
+    const updatedEmployees = employees.filter(
+      (employee) => employee._id !== id
+    );
+    setEmployees(updatedEmployees);
   };
 
   if (!employees) return <div>Loading...</div>;

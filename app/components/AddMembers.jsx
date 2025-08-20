@@ -84,18 +84,6 @@ export default function AddMembers({
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 inline-block mr-2" />
                   {e.name} - {e.phone}
                 </span>
-
-                <button
-                  type="button"
-                  aria-label="Remove employee from group"
-                  onClick={handleDeleteMember}
-                  name={e.name}
-                  id={e._id}
-                  title="Remove"
-                  className="h-6 w-6  rounded-full border border-red-200 bg-red-50 text-red-600 hover:bg-red-400 hover:border-red-300 hover:text-white focus:ring-2 focus:ring-red-200 cursor-pointer duration-700"
-                >
-                  ×
-                </button>
               </div>
             ))}
         </aside>
