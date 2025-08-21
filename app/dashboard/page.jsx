@@ -55,39 +55,39 @@ export default function DashboardPage() {
   const todayName = new Date().toLocaleDateString("en-US", {
     weekday: "short",
   });
+
   const todayShifts = filterShiftsByDay(shifts, todayName);
 
   const { current, next } = getCurrentAndNextShift(todayShifts, now);
+
   useEffect(() => {
     const fetchGroups = async () => {
       const res = await fetch(`http://localhost:5000/groups`);
-      if (!res.ok) {
-        return;
-      }
+
+      if (!res.ok) return;
+
       const data = await res.json();
       setShifts(data);
     };
     fetchGroups();
   }, []);
 
-  //IMP
-  //!FIX LATER
   useEffect(() => {
     const fetchEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
 
       if (!res) return console.error("Cant fetch employees", res.statusText);
       const data = await res.json();
+
       const filteredEmployees = data.filter(
         (e) => current.some((shift) => e.group?._id == shift._id) //N
       ); //return only the employees that TRUE
       setEmployees(filteredEmployees);
     };
+
     fetchEmployees();
   }, [current]);
 
-  //IMP
-  //!FIX LATER
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 3000);
     return () => clearInterval(t);
@@ -109,7 +109,6 @@ export default function DashboardPage() {
           })}
         </span>
 
-        {/* Shifts: Current and Next */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Current Shift */}
           <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
@@ -129,7 +128,6 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* Start */}
                     <div className="rounded-md bg-gradient-to-tl from-green-600 to-green-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                       <div className="text-xs uppercase font-medium">
                         Started
@@ -139,7 +137,6 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {/* End */}
                     <div className="rounded-md bg-gradient-to-tl from-orange-500 to-orange-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                       <div className="text-xs uppercase font-medium">Ends</div>
                       <div className="mt-1 text-lg font-semibold">
@@ -202,7 +199,6 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Starts */}
                     <div className="rounded-md bg-gradient-to-tl from-slate-300/50 to-slate-200/50 p-4 shadow hover:scale-105 hover:shadow-lg transition">
                       <div className="text-xs text-gray-700 uppercase font-medium">
                         Starts
@@ -212,7 +208,6 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {/* Ends */}
                     <div className="rounded-md bg-gradient-to-tl from-slate-300/50 to-slate-200/50 p-4 shadow hover:scale-105 hover:shadow-lg transition">
                       <div className="text-xs text-gray-700 uppercase font-medium">
                         Ends

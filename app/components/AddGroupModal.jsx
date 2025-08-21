@@ -11,11 +11,16 @@ export default function AddGroupModal({ isOpen, onClose }) {
     supervisor: "",
   });
   const [employees, setEmployees] = useState([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const getEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
-      if (!res) return console.error("Failed to fetch employees");
+      if (!res) {
+        setMessage("Failed to fetch employees");
+        console.error("Failed to fetch employees:", res.statusText);
+        return;
+      }
       const data = await res.json();
       setEmployees(data);
       console.log("Fetched employees:", data);
@@ -54,7 +59,9 @@ export default function AddGroupModal({ isOpen, onClose }) {
       body: JSON.stringify(groupForm),
     });
     if (!res.ok) {
-      console.error("Failed to submit group form");
+      const errorData = await res.json();
+      setMessage(errorData.message || "Failed to submit group form");
+      console.log("Failed to submit group form:", res.statusText);
       return;
     }
     setGroupForm({
@@ -74,7 +81,7 @@ export default function AddGroupModal({ isOpen, onClose }) {
         <h2 className="text-2xl font-bold mb-6 text-center text-black ">
           Add New Group
         </h2>
-
+        <span className="text-xl text-red-800">{message}</span>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-gray-700 mb-1">Group Name</label>
