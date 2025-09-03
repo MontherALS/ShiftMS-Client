@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import AddMembers from "@/app/components/AddMembers";
-import EditGroupDetails from "@/app/components/EditGroupDetails";
+import AddMembers from "./AddMembers";
+import EditGroupDetails from "./EditGroupDetails";
 export default function EditGroupPage() {
   const { id } = useParams();
   const router = useRouter();

@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import NavBar from "../components/NavBar";
+import NavBar from "@/app/components/NavBar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-export default function EmployeePage() {
+
+export default function AddEmployeePage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ export default function EmployeePage() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/add-employee", {
+    const res = await fetch("http://localhost:5000/employees", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -161,7 +162,7 @@ export default function EmployeePage() {
               type="button"
               className="w-full bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200"
             >
-              <Link href="/">Cancel</Link>
+              <Link href="/manage-employees">Cancel</Link>
             </button>
           </div>
         </form>

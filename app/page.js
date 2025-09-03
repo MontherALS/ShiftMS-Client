@@ -20,7 +20,7 @@ export default function Home() {
         </p>
 
         <Link
-          href="/login"
+          href="/dashboard"
           className="inline-block mt-4 bg-orange-400 text-white text-lg font-medium px-6 py-3 rounded-lg shadow hover:bg-orange-600 duration-500 transition"
         >
           <span className="text-white">Get Started </span>
