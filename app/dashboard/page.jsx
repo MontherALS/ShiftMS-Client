@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Countdown from "react-countdown";
 
+//TODO REMOVE THIS LOGIC TO ANOTHER FILE (UTIL)
 function filterShiftsByDay(shifts, today) {
   const filteredShifts = shifts.filter((s) => s.workingDays.includes(today));
   return filteredShifts;
@@ -47,6 +48,9 @@ function getCurrentAndNextShift(shifts, now) {
 }
 
 export default function DashboardPage() {
+//TODO DESTRUCTER THIS PAGE TO COMPONENTS 
+
+
   //*State's
   const [now, setNow] = useState(new Date());
   const [shifts, setShifts] = useState([]);

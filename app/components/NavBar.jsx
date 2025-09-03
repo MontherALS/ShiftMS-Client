@@ -11,7 +11,7 @@ export default function NavBar() {
       <div className="flex justify-center items-center">
         <Image src={logo} width={85} alt="logo" />
         <h1 className="text-2xl font-bold text-gray-800">
-          Shift Management System
+          Admin Page
         </h1>
       </div>
       {/* Navigation Links */}

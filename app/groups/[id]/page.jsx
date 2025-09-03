@@ -2,13 +2,10 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 export default function EditGroupPage() {
   const params = useParams();
-  const router = useRouter();
   const { id } = params;
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [group, setGroup] = useState(null);
 
   useEffect(() => {
@@ -20,7 +17,7 @@ export default function EditGroupPage() {
         setGroup(data);
         console.log("Fetched group:", data);
       } catch (e) {
-        console.error(e);
+        console.error(e.message);
       }
     };
     fetchGroup();
