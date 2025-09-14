@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import CurrentShift from "./CurrentShift";
 import NextShift from "./NextShift";
 import ShiftEmployees from "./ShiftEmployees";
+import Calendar from "../groups/Calendar";
 //logic
 import { getCurrentAndNextShift, filterShiftsByDay } from "@/lib/shifts";
 
@@ -63,7 +64,7 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto space-y-6">
-        <span className="text-gray-600 text-lg font-medium">
+        <span className="text-gray-600 text-sm font-medium mb-4 block">
           {new Date().toLocaleDateString("en-US", {
             weekday: "long",
             year: "numeric",
@@ -71,7 +72,8 @@ export default function DashboardPage() {
             day: "numeric",
           })}
         </span>
-
+        <Calendar groups={shifts} />
+        {/* Shifts Section */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Current and Next Shift */}
           <CurrentShift current={current} />

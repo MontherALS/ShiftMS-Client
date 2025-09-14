@@ -46,7 +46,7 @@ export default function GroupsPage() {
         <div className="max-w-6xl mx-auto space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
             <h1 className="text-4xl font-bold text-gray-800 text-center sm:text-left">
-              Group Schedule Overview
+              Groups Managment
             </h1>
 
             <button
@@ -56,9 +56,6 @@ export default function GroupsPage() {
               + Add New Group
             </button>
           </div>
-
-          {/* Schedule Table */}
-          <Calendar groups={groups} />
 
           {/* Group Cards */}
           <GroupsCards groups={groups} />

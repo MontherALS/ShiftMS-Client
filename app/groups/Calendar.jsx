@@ -19,19 +19,31 @@ export default function Calendar({ groups }) {
         <tbody>
           {groups.map((group, i) => (
             <tr key={i} className="border-t text-center">
-              <td className="px-4 py-2 text-left font-medium text-gray-800">
+              <td className="ml-5 px-2 py-3 text-left font-medium text-gray-800">
                 {group.name} <br />
-                <span className="text-sm text-gray-500">
-                  Admin: {group?.supervisor?.name || "N/A"}
+                <span className="text-[12px] text-left px-2 text-gray-500">
+                  {group?.supervisor?.name || "N/A"}
                 </span>
               </td>
               {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map((day) => (
-                <td key={day} className="px-4 py-2 text-gray-700">
-                  {group.workingDays.includes(day)
-                    ? group.shiftStart && group.shiftEnd
-                      ? `${group.shiftStart} - ${group.shiftEnd}`
-                      : "-"
-                    : "-"}
+                <td key={day} className=" text-gray-700 ">
+                  {group.workingDays.includes(day) ? (
+                    group.shiftStart && group.shiftEnd ? (
+                      <div className="whitespace-pre-line py-2">
+                        <span className="text-green-800">
+                          {group.shiftStart}
+                        </span>
+                        <br />
+                        -
+                        <br />
+                        <span className="text-red-800">{group.shiftEnd}</span>
+                      </div>
+                    ) : (
+                      "-"
+                    )
+                  ) : (
+                    "-"
+                  )}
                 </td>
               ))}
             </tr>

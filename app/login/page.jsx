@@ -1,14 +1,18 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import Image from "next/image";
-import logo from "@/public/Images/logo.png";
+import Link from "next/link";
+import HomeNav from "../components/HomeNav.jsx";
+// Images
+
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -16,70 +20,131 @@ export default function LoginPage() {
       [name]: value,
     }));
   }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    if (!res.ok) {
-      const errorData = await res.json();
-      setMessage(errorData.message);
-      return;
-    }
+    setIsLoading(true);
+    setMessage("");
 
-    const data = await res.json();
+    try {
+      const res = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      window.location.href = "/dashboard";
+      if (!res.ok) {
+        const errorData = await res.json();
+        setMessage(errorData.message);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "/dashboard";
+      }
+    } catch (error) {
+      setMessage("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
+
   return (
-    <section className="bg-gradient-to-bl from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-        <div className=" flex justify-center flex-col text-center items-center mb-6">
-          <Image alt="logo" width={150} height={150} src={logo} />
-          <span className="text-red-500">{message}</span>
-          <h1 className="text-2xl font-bold text-gray-800">Welcome Back</h1>
-          <p className="text-gray-600 mt-2">Login to accsees the service</p>
+    <section className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+      {/* Navigation */}
+      <HomeNav />
+
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md border border-gray-100">
+          <div className="text-center mb-8">
+            {message && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <span className="text-red-600 text-sm">{message}</span>
+              </div>
+            )}
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-gray-600">Login to access the service</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Email Address
+              </label>
+              <input
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                className="w-full p-3 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                value={formData.password}
+                onChange={handleChange}
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                className="w-full p-3 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="text-center">
+              <Link
+                href="/reset-password"
+                className="text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg"
+            >
+              {isLoading ? "Logging in..." : "Log In"}
+            </button>
+
+            <div className="text-center pt-4 border-t border-gray-200">
+              <span className="text-gray-600 text-sm">
+                Don't have an account?{" "}
+              </span>
+              <Link
+                href="/signup"
+                className="text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
+              >
+                Sign up here
+              </Link>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              value={formData.email}
-              onChange={handleChange}
-              type="email"
-              name="email"
-              placeholder="Email address"
-              className="w-full p-3 border text-gray-600 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <input
-              value={formData.password}
-              onChange={handleChange}
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="w-full p-3 border text-gray-600 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200"
-          >
-            Sign In
-          </button>
-        </form>
       </div>
     </section>
   );
