@@ -21,7 +21,7 @@ export default function NavBar() {
           Groups
         </Link>
         <Link href="/manage-employees" className={linkStyle}>
-          Manage Employees
+          Employees
         </Link>
         <Link href="/help" className={linkStyle}>
           Help

@@ -1,5 +1,7 @@
 import React from "react";
 
+//TODO move this file to dashboard folder
+
 export default function Calendar({ groups }) {
   return (
     <div className="overflow-x-auto">
@@ -21,7 +23,7 @@ export default function Calendar({ groups }) {
             <tr key={i} className="border-t text-center">
               <td className="ml-5 px-2 py-3 text-left font-medium text-gray-800">
                 {group.name} <br />
-                <span className="text-[12px] text-left px-2 text-gray-500">
+                <span className="text-[12px] text-left  text-gray-500">
                   {group?.supervisor?.name || "N/A"}
                 </span>
               </td>
