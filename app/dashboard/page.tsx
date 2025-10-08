@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto space-y-6">
-        <span className="text-gray-600 text-sm font-medium mb-4 block">
+        <span className="text-gray-600 text-sm font-medium mb-4 ml-5 block">
           {new Date().toLocaleDateString("en-US", {
             weekday: "long",
             year: "numeric",
