@@ -8,19 +8,22 @@ import NextShift from "./NextShift";
 import ShiftEmployees from "./ShiftEmployees";
 import Calendar from "../groups/Calendar";
 //logic
-import { getCurrentAndNextShift, filterShiftsByDay } from "@/lib/shifts";
+import { getCurrentAndNextShift, filterShiftsByDay } from "../../lib/shifts";
+import { GroupType, EmployeeType } from "../Types/Type";
 
 export default function DashboardPage() {
   //*State's
-  const [now, setNow] = useState(new Date());
-  const [shifts, setShifts] = useState([]);
-  const [employees, setEmployees] = useState([]);
+  const [now, setNow] = useState<Date>(new Date());
+
+  const [groups, setGroups] = useState<GroupType[]>([]);
+
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
   const todayName = new Date().toLocaleDateString("en-US", {
     weekday: "short",
   });
 
-  const todayShifts = filterShiftsByDay(shifts, todayName);
+  const todayShifts = filterShiftsByDay(groups, todayName);
 
   const { current, next } = getCurrentAndNextShift(todayShifts, now);
 
@@ -30,8 +33,8 @@ export default function DashboardPage() {
 
       if (!res.ok) return;
 
-      const data = await res.json();
-      setShifts(data);
+      const data: GroupType[] = await res.json();
+      setGroups(data);
     };
     fetchGroups();
   }, []);
@@ -40,8 +43,8 @@ export default function DashboardPage() {
     const fetchEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
 
-      if (!res) return console.error("Cant fetch employees", res.statusText);
-      const data = await res.json();
+      if (!res.ok) return console.error("Cant fetch employees", res.statusText);
+      const data: EmployeeType[] = await res.json();
 
       const filteredEmployees = data.filter((e) =>
         current.some((shift) => e.group?._id == shift._id)
@@ -72,15 +75,14 @@ export default function DashboardPage() {
             day: "numeric",
           })}
         </span>
-        <Calendar groups={shifts} />
-        {/* Shifts Section */}
+
+        <Calendar groups={groups} />
+
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          {/* Current and Next Shift */}
           <CurrentShift current={current} />
           <NextShift next={next} />
         </section>
 
-        {/* Current Employees */}
         <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-lg transition">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800">

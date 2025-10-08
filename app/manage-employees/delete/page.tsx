@@ -1,27 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import NavBar from "@/app/components/NavBar";
+import NavBar from "../../components/NavBar";
+import { EmployeeType } from "../../Types/Type";
 
 export default function DeleteEmployeePage() {
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
+
   useEffect(() => {
     const fetchEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
-      if (!res) return;
-      const data = await res.json();
-      console.log("Fetched employees:", data);
+
+      if (!res.ok) {
+        console.error("Failed to fetch employees", res.statusText);
+        return;
+      }
+
+      const data: EmployeeType[] = await res.json();
       setEmployees(data);
     };
+
     fetchEmployees();
   }, []);
 
-  const handleDelete = async (e) => {
-    const id = e.target.name;
-    const confirm = window.confirm(
-      "Are you sure you want to delete this employee with ID:",
-      id
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const id: string = e.currentTarget.value;
+
+    const confirm: boolean = window.confirm(
+      "Are you sure you want to delete this employee with ID:" + id
     );
+
     if (!confirm) return;
+
     const res = await fetch(`http://localhost:5000/employees/${id}`, {
       method: "DELETE",
     });
@@ -35,7 +44,10 @@ export default function DeleteEmployeePage() {
     setEmployees(updatedEmployees);
   };
 
-  if (!employees) return <div>Loading...</div>;
+  if (!employees)
+    return (
+      <div className="text-center animate-bounce text-3xl">Loading...</div>
+    );
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -58,6 +70,7 @@ export default function DeleteEmployeePage() {
                 <span className="truncate text-slate-700">{employee.name}</span>
                 <button
                   type="button"
+                  value={employee._id}
                   name={employee._id}
                   className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50"
                   onClick={handleDelete}

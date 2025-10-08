@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import AddGroupModal from "./AddGroupModal";
-import Calendar from "./Calendar";
 import GroupsCards from "./GroupsCards";
-
+import { GroupType } from "../Types/Type";
 export default function GroupsPage() {
-  const [groups, setGroups] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [groups, setGroups] = useState<GroupType[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -18,7 +18,7 @@ export default function GroupsPage() {
           console.error("Failed to fetch groups");
           return;
         }
-        const data = await res.json();
+        const data: GroupType[] = await res.json();
         setGroups(data);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -57,7 +57,6 @@ export default function GroupsPage() {
             </button>
           </div>
 
-          {/* Group Cards */}
           <GroupsCards groups={groups} />
         </div>
       </div>

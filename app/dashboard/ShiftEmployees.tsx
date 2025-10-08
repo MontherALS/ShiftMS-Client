@@ -1,6 +1,10 @@
 import React from "react";
-
-export default function ShiftEmployees({ employees }) {
+import { EmployeeType } from "../Types/Type";
+export default function ShiftEmployees({
+  employees,
+}: {
+  employees: EmployeeType[];
+}) {
   return (
     <ul className="divide-y divide-gray-200">
       {employees.length > 0 || !employees ? (

@@ -2,8 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 // Images
-import heroImg from "@/public/Images/heroImg.jpg";
-import HomeNav from "../app/components/HomeNav.jsx";
+// import heroImg from "@/public/Images/heroImg.jpg";
+import HomeNav from "../app/components/HomeNav.tsx";
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col relative overflow-hidden">

@@ -1,18 +1,20 @@
 import React from "react";
 import Countdown from "react-countdown";
-export default function CurrentShift({ current }) {
+import { GroupType } from "../Types/Type";
+
+export default function CurrentShift({ current }: { current: GroupType[] }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
       <h1 className="text-lg font-semibold text-gray-800">Current Shifts</h1>
       <hr className="my-4" />
 
       {current && current.length > 0 ? (
-        current.map((shift, i) => (
+        current.map((g, i) => (
           <div key={i} className="mb-6">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <h2 className="text-lg font-semibold text-gray-800">
-                {shift?.name || "N/D"}
+                {g?.name || "N/D"}
               </h2>
             </div>
 
@@ -20,14 +22,14 @@ export default function CurrentShift({ current }) {
               <div className="rounded-md bg-gradient-to-tl from-green-600 to-green-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Started</div>
                 <div className="mt-1 text-lg font-semibold">
-                  {shift?.shiftStart || "N/D"}
+                  {g?.shiftStart || "N/D"}
                 </div>
               </div>
 
               <div className="rounded-md bg-gradient-to-tl from-orange-500 to-orange-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Ends</div>
                 <div className="mt-1 text-lg font-semibold">
-                  {shift?.shiftEnd || "N/D"}
+                  {g?.shiftEnd || "N/D"}
                 </div>
               </div>
 
@@ -35,9 +37,9 @@ export default function CurrentShift({ current }) {
               <div className="rounded-md bg-gradient-to-tl from-cyan-600 to-cyan-400 p-4 text-white shadow hover:scale-105 hover:shadow-lg transition">
                 <div className="text-xs uppercase font-medium">Remaining</div>
                 <div className="mt-1 text-lg font-semibold">
-                  {shift?._end ? (
+                  {g?._end ? (
                     <Countdown
-                      date={shift._end}
+                      date={g._end}
                       renderer={({ hours, minutes, seconds, completed }) =>
                         completed ? (
                           <span className="text-red-500">Shift Ended</span>

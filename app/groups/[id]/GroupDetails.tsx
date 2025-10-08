@@ -1,6 +1,6 @@
 import React from "react";
-
-export default function GroupDetails({ group }) {
+import { GroupType } from "../../Types/Type";
+export default function GroupDetails({ group }: { group: GroupType }) {
   return (
     <section className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">

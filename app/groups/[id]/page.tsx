@@ -3,26 +3,29 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
+import { GroupType } from "../../Types/Type";
 //Components
 import GroupEmployees from "./GroupEmployees";
-import GroupHeader from "@/app/components/GroupHeader";
+import GroupHeader from "../../components/GroupHeader";
 import GroupDetails from "./GroupDetails";
 import GroupSummary from "./GroupSummary";
 
 export default function EditGroupPage() {
   const params = useParams();
   const { id } = params;
-  const [group, setGroup] = useState(null);
+  const [group, setGroup] = useState<GroupType>({} as GroupType);
 
   useEffect(() => {
     const fetchGroup = async () => {
       try {
         const res = await fetch(`http://localhost:5000/groups/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch group");
-        const data = await res.json();
+
+        if (!res.ok) return console.error("Failed to fetch group");
+
+        const data: GroupType = await res.json();
+
         setGroup(data);
-        console.log("Fetched group:", data);
-      } catch (e) {
+      } catch (e: any) {
         console.error(e.message);
       }
     };

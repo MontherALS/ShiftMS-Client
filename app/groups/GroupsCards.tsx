@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-export default function GroupsCards({ groups }) {
+import { GroupType } from "../Types/Type";
+export default function GroupsCards({ groups }: { groups: GroupType[] }) {
   return (
     <div className="grid gap-6">
       {groups.map((group, i) => (

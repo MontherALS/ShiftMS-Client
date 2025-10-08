@@ -1,6 +1,6 @@
 import React from "react";
-
-export default function Calendar({ groups }) {
+import { GroupType } from "../Types/Type";
+export default function Calendar({ groups }: { groups: GroupType[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300 rounded-lg text-sm">

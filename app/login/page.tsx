@@ -3,17 +3,19 @@ import React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import HomeNav from "../components/HomeNav.jsx";
-// Images
+import { LoginFormData } from "../Types/Type.js";
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  function handleChange(e) {
+  const [message, setMessage] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -21,7 +23,7 @@ export default function LoginPage() {
     }));
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     setMessage("");
@@ -36,17 +38,19 @@ export default function LoginPage() {
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
+        const errorData: { message: string } = await res.json();
         setMessage(errorData.message);
         return;
       }
 
-      const data = await res.json();
+      const data: { token: string } = await res.json();
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/dashboard";
+      if (!data.token) {
+        setMessage("Login failed. Please try again.");
+        return;
       }
+      localStorage.setItem("token", data.token);
+      window.location.href = "/dashboard";
     } catch (error) {
       setMessage("Network error. Please try again.");
     } finally {

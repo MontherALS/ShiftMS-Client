@@ -15,7 +15,6 @@ export default function ManageEmployeesPage() {
         </h1>
 
         <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2">
-          {/* Add Employees */}
           <Link
             href="/manage-employees/add"
             className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-1 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
@@ -40,7 +39,6 @@ export default function ManageEmployeesPage() {
             </div>
           </Link>
 
-          {/* Delete Employees */}
           <Link
             href="/manage-employees/delete"
             className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-600 to-red-600 p-1 shadow-lg focus:outline-none focus:ring-4 focus:ring-rose-300"

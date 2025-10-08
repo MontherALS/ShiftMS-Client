@@ -1,22 +1,23 @@
 "use client";
 
 import React from "react";
-import NavBar from "@/app/components/NavBar";
+import NavBar from "../../components/NavBar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-
+import { GroupType, EmployeeType } from "../../Types/Type";
 export default function AddEmployeePage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EmployeeType>({
     name: "",
     phone: "",
     email: "",
     group: null,
   });
-  const [groups, setGroups] = useState([]);
-  const [message, setMessage] = useState("");
+  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [message, setMessage] = useState<string>("");
+
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -26,7 +27,7 @@ export default function AddEmployeePage() {
           setMessage(errorData.message);
           return;
         }
-        const data = await res.json();
+        const data: GroupType[] = await res.json();
         setGroups(data);
         console.log("Fetched groups:", data);
       } catch (error) {
@@ -35,15 +36,20 @@ export default function AddEmployeePage() {
     };
     fetchGroups();
   }, []);
-  const handleChange = (e) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const res = await fetch("http://localhost:5000/employees", {
       method: "POST",
       headers: {
@@ -52,11 +58,12 @@ export default function AddEmployeePage() {
       body: JSON.stringify(formData),
     });
     if (!res.ok) {
-      const errorData = await res.json();
+      const errorData: { message: string } = await res.json();
+
       setMessage(errorData.message);
       return;
     }
-    const data = await res.json();
+    const data: EmployeeType = await res.json();
     console.log("Employee added:", data);
     router.push("/dashboard");
   };

@@ -3,12 +3,9 @@ import React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// Images
-import logo from "@/public/Images/logo.png";
-import menuLogo from "@/public/Images/menu.png";
-import menuCloseLogo from "@/public/Images/menuClose.png";
+
 export default function HomeNav() {
-  const [navIsOpen, setNavIsOpen] = useState(false);
+  const [navIsOpen, setNavIsOpen] = useState<boolean>(false);
 
   const navigationsTaps = [
     { name: "Home", url: "/" },
@@ -30,7 +27,7 @@ export default function HomeNav() {
           <div className="p-1  rounded-xl">
             <Link href="/" className="cursor-pointer">
               <Image
-                src={logo}
+                src="/Images/logo.png"
                 width={50}
                 height={50}
                 alt="logo"
@@ -49,7 +46,7 @@ export default function HomeNav() {
         >
           <Image
             className="transition-all duration-300 ease-in-out filter invert"
-            src={navIsOpen ? menuCloseLogo : menuLogo}
+            src={navIsOpen ? "/Images/menuClose.png" : "/Images/menu.png"}
             width={20}
             height={20}
             alt="navigation"

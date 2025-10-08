@@ -1,35 +1,49 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-export default function AddGroupModal({ isOpen, onClose }) {
+import { EmployeeType } from "../Types/Type";
+
+type AddGroupModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+type GroupFormType = {
+  name: string;
+  workingDays: string[];
+  shiftStart: string;
+  shiftEnd: string;
+  supervisor: string;
+};
+
+export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
   //State's
-  const [groupForm, setGroupForm] = useState({
+  const [groupForm, setGroupForm] = useState<GroupFormType>({
     name: "",
     workingDays: [],
     shiftStart: "",
     shiftEnd: "",
     supervisor: "",
   });
-  const [employees, setEmployees] = useState([]);
-  const [message, setMessage] = useState("");
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
+
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     const getEmployees = async () => {
       const res = await fetch("http://localhost:5000/employees");
-      if (!res) {
+
+      if (!res.ok) {
         setMessage("Failed to fetch employees");
         console.error("Failed to fetch employees:", res.statusText);
         return;
       }
-      const data = await res.json();
+      const data: EmployeeType[] = await res.json();
       setEmployees(data);
-      console.log("Fetched employees:", data);
     };
     getEmployees();
   }, []);
 
-  //logic
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
 
     const updatedDays = checked
@@ -40,16 +54,19 @@ export default function AddGroupModal({ isOpen, onClose }) {
       ...groupForm,
       workingDays: updatedDays,
     });
-    console.log("Updated working days:", groupForm);
   };
-  const handleChange = (e) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setGroupForm((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await fetch("http://localhost:5000/groups", {
       method: "POST",
@@ -59,11 +76,12 @@ export default function AddGroupModal({ isOpen, onClose }) {
       body: JSON.stringify(groupForm),
     });
     if (!res.ok) {
-      const errorData = await res.json();
+      const errorData: { message: string } = await res.json();
       setMessage(errorData.message || "Failed to submit group form");
       console.log("Failed to submit group form:", res.statusText);
       return;
     }
+
     setGroupForm({
       name: "",
       workingDays: [],
@@ -97,7 +115,6 @@ export default function AddGroupModal({ isOpen, onClose }) {
           <div>
             <label className="block text-gray-700 mb-1">Supervisor</label>
             <select
-              type="text"
               name="supervisor"
               onChange={handleChange}
               className="w-full border text-gray-500 rounded px-3 py-2"
