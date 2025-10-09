@@ -4,11 +4,12 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import AddMembers from "./AddMembers";
 import EditGroupDetails from "./EditGroupDetails";
+import { GroupWithIds, EmployeeType } from "../../../Types/Type";
 export default function EditGroupPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  const [group, setGroup] = useState({
+  const [group, setGroup] = useState<GroupWithIds>({
     name: "",
     workingDays: [],
     shiftStart: "",
@@ -17,17 +18,17 @@ export default function EditGroupPage() {
     employees: [],
   });
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<GroupWithIds>({
     name: "",
     workingDays: [],
     shiftStart: "",
     shiftEnd: "",
-    supervisor: null,
+    supervisor: "",
     employees: [],
   });
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     const fetchGroupData = async () => {
@@ -38,18 +39,16 @@ export default function EditGroupPage() {
         setMessage(errorData.message);
         return;
       }
-      const data = await res.json();
+      const data: GroupWithIds = await res.json();
 
       setGroup(data);
       setFormData({
         name: data?.name || "",
-        supervisor: data?.supervisor?._id || "",
+        supervisor: data?.supervisor?._id,
         shiftStart: data?.shiftStart || "",
         shiftEnd: data?.shiftEnd || "",
         workingDays: Array.isArray(data?.workingDays) ? data.workingDays : [],
-        employees: Array.isArray(data?.employees)
-          ? data.employees.map((employee) => employee._id)
-          : [],
+        employees: data?.employees.map((employee) => employee?._id),
       });
     };
 
@@ -69,14 +68,16 @@ export default function EditGroupPage() {
     fetchGroupData();
   }, [id]);
 
-  function handleChange(e) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...(prev || {}),
       [name]: value,
     }));
   }
-  function handleCheckboxChange(e) {
+  function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, value, name } = e.target;
     if (name === "workingDays") {
       const currentDays = Array.isArray(formData.workingDays)
@@ -104,7 +105,7 @@ export default function EditGroupPage() {
       }));
     }
   }
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       const res = await fetch(`http://localhost:5000/groups/${id}`, {

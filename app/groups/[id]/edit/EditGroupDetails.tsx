@@ -1,4 +1,16 @@
 import React from "react";
+import { GroupWithIds, EmployeeType } from "../../../Types/Type";
+type propType = {
+  handleChange: () => void;
+  handleCheckboxChange: () => void;
+  handleSubmit: () => void;
+  handleDeleteGroup: () => void;
+  formData: GroupWithIds;
+  group: GroupWithIds;
+  employees: EmployeeType[];
+  message: string;
+};
+
 export default function EditGroupDetails({
   handleChange,
   handleCheckboxChange,
@@ -8,7 +20,7 @@ export default function EditGroupDetails({
   group,
   employees,
   message,
-}) {
+}: propType) {
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* Header */}
@@ -89,9 +101,9 @@ export default function EditGroupDetails({
                 placeholder={group ? group.supervisor?.name : "---"}
                 className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-600 focus:outline-none"
               >
-                <option value={formData?.supervisor_id || ""}>
+                <option value={formData?.supervisor?_id || ""}>
                   {group?.supervisor
-                    ? `${group?.supervisor.name} - ${group?.supervisor.phone}`
+                    ? `${group?.supervisor?.name} - ${group?.supervisor.phone}`
                     : ""}
                 </option>
 

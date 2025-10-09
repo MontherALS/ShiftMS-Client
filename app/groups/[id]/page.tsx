@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
-import { GroupType } from "../../Types/Type";
+import { GroupWithObjects } from "../../Types/Type";
 //Components
 import GroupEmployees from "./GroupEmployees";
 import GroupHeader from "../../components/GroupHeader";
@@ -13,7 +13,7 @@ import GroupSummary from "./GroupSummary";
 export default function EditGroupPage() {
   const params = useParams();
   const { id } = params;
-  const [group, setGroup] = useState<GroupType>({} as GroupType);
+  const [group, setGroup] = useState<GroupWithObjects>({} as GroupWithObjects);
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -22,7 +22,7 @@ export default function EditGroupPage() {
 
         if (!res.ok) return console.error("Failed to fetch group");
 
-        const data: GroupType = await res.json();
+        const data: GroupWithObjects = await res.json();
 
         setGroup(data);
       } catch (e: any) {
@@ -46,18 +46,14 @@ export default function EditGroupPage() {
   return (
     <main dir="ltr" className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <GroupHeader group={group} id={id} />
+        <GroupHeader group={group} />
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <GroupDetails group={group} />
 
-          {/* Summary */}
           <GroupSummary group={group} />
         </div>
 
-        {/* Team members */}
         <GroupEmployees group={group} />
       </div>
     </main>

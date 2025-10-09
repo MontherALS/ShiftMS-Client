@@ -8,16 +8,28 @@ export type EmployeeType = {
   name: string;
   phone: string;
   email: string;
-  group: GroupType | null;
+  group: GroupWithObjects;
 };
-export type GroupType = {
+export type GroupWithObjects = {
   _id?: string;
   name: string;
   workingDays: string[];
   shiftStart: string;
   shiftEnd: string;
-  supervisor: EmployeeType;
+  supervisor: EmployeeType | null;
   employees: EmployeeType[];
+  _start?: Date;
+  _end?: Date;
+};
+
+export type GroupWithIds = {
+  _id?: string;
+  name: string;
+  workingDays: string[];
+  shiftStart: string;
+  shiftEnd: string;
+  supervisor: string;
+  employees: string[];
   _start?: Date;
   _end?: Date;
 };

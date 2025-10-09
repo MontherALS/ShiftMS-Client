@@ -22,7 +22,9 @@ export default function Calendar({ groups }: { groups: GroupType[] }) {
               <td className="ml-5 px-2 py-3 text-left font-medium text-gray-800">
                 {group.name} <br />
                 <span className="text-[12px] text-left px-2 text-gray-500">
-                  {group?.supervisor?.name || "N/A"}
+                  {typeof group.supervisor !== "string"
+                    ? group.supervisor.name
+                    : "N/A"}
                 </span>
               </td>
               {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map((day) => (

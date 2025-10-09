@@ -14,7 +14,10 @@ export default function GroupsCards({ groups }: { groups: GroupType[] }) {
               {group.name}
             </h2>
             <p className="text-lg text-gray-600">
-              Supervisor: {group.supervisor ? group.supervisor.name : "N/A"}
+              Supervisor:{" "}
+              {typeof group.supervisor !== "string"
+                ? group.supervisor.name
+                : "N/A"}
             </p>
           </div>
 

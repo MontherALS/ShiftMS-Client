@@ -1,7 +1,7 @@
 import React from "react";
 
-import { GroupType, EmployeeType } from "../../Types/Type";
-export default function GroupEmployees({ group }: { group: GroupType }) {
+import { GroupWithObjects, EmployeeType } from "../../Types/Type";
+export default function GroupEmployees({ group }: { group: GroupWithObjects }) {
   return (
     <section className="mt-6 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
