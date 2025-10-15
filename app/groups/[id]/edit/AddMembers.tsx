@@ -1,12 +1,28 @@
 import React from "react";
+import {
+  GroupWithObjects,
+  GroupWithIds,
+  EmployeeType,
+} from "../../../Types/Type";
 
+type PropType = {
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleDeleteGroup: () => void;
+  formData: GroupWithIds;
+  group: GroupWithObjects | null;
+  employees: EmployeeType[];
+  message: string;
+};
 export default function AddMembers({
   group,
   employees,
   formData,
   handleCheckboxChange,
-  handleDeleteMember,
-}) {
+}: PropType) {
   return (
     <section className="max-w-6xl mx-auto px-4">
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -16,7 +32,7 @@ export default function AddMembers({
           </div>
           <div className="border-t border-gray-100 max-h-80 overflow-y-auto divide-y divide-gray-100">
             {employees.length > 0 ? (
-              employees.map((employee) => (
+              employees.map((employee, idx) => (
                 <label
                   key={employee._id}
                   className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer"
@@ -27,7 +43,7 @@ export default function AddMembers({
                       name="employees"
                       value={employee._id}
                       checked={
-                        formData
+                        formData && employee._id
                           ? formData.employees.includes(employee._id)
                           : false
                       }

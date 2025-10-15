@@ -1,12 +1,19 @@
 import React from "react";
-import { GroupWithIds, EmployeeType } from "../../../Types/Type";
-type propType = {
-  handleChange: () => void;
-  handleCheckboxChange: () => void;
-  handleSubmit: () => void;
+import {
+  GroupWithIds,
+  GroupWithObjects,
+  EmployeeType,
+} from "../../../Types/Type";
+
+type PropType = {
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleDeleteGroup: () => void;
   formData: GroupWithIds;
-  group: GroupWithIds;
+  group: GroupWithObjects | null;
   employees: EmployeeType[];
   message: string;
 };
@@ -20,7 +27,7 @@ export default function EditGroupDetails({
   group,
   employees,
   message,
-}: propType) {
+}: PropType) {
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* Header */}
@@ -97,11 +104,9 @@ export default function EditGroupDetails({
                 id="supervisor"
                 name="supervisor"
                 onChange={handleChange}
-                type="text"
-                placeholder={group ? group.supervisor?.name : "---"}
                 className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-600 focus:outline-none"
               >
-                <option value={formData?.supervisor?_id || ""}>
+                <option value={formData?.supervisor || ""}>
                   {group?.supervisor
                     ? `${group?.supervisor?.name} - ${group?.supervisor.phone}`
                     : ""}

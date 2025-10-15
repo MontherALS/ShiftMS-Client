@@ -4,12 +4,13 @@ export type LoginFormData = {
 };
 
 export type EmployeeType = {
-  _id?: string;
+  _id: string;
   name: string;
   phone: string;
   email: string;
   group: GroupWithObjects;
 };
+
 export type GroupWithObjects = {
   _id?: string;
   name: string;
