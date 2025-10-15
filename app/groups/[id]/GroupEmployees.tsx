@@ -10,7 +10,11 @@ export default function GroupEmployees({ group }: { group: GroupWithObjects }) {
           <p className="text-sm text-gray-500 mt-1">
             Count:{" "}
             <span className="font-medium text-gray-900">
-              {group?.employees.length || 0}
+              {group?.employees && group.employees.length > 0 ? (
+                group.employees.length
+              ) : (
+                <span className="text-gray-600">None</span>
+              )}
             </span>
           </p>
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
-import { GroupType } from "../Types/Type";
-export default function Calendar({ groups }: { groups: GroupType[] }) {
+import { GroupWithObjects } from "../Types/Type";
+export default function Calendar({ groups }: { groups: GroupWithObjects[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300 rounded-lg text-sm">
@@ -23,7 +23,7 @@ export default function Calendar({ groups }: { groups: GroupType[] }) {
                 {group.name} <br />
                 <span className="text-[12px] text-left px-2 text-gray-500">
                   {typeof group.supervisor !== "string"
-                    ? group.supervisor.name
+                    ? group.supervisor?.name
                     : "N/A"}
                 </span>
               </td>

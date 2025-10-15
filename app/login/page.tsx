@@ -2,7 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
-import HomeNav from "../components/HomeNav.jsx";
+import HomeNav from "../components/HomeNav";
 import { LoginFormData } from "../Types/Type.js";
 
 export default function LoginPage() {

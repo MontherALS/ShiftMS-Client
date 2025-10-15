@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 // Images
-// import heroImg from "@/public/Images/heroImg.jpg";
+import heroImg from "../public/Images/heroImg.jpg";
 import HomeNav from "../app/components/HomeNav.tsx";
 export default function Home() {
   return (

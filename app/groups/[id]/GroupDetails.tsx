@@ -1,6 +1,7 @@
 import React from "react";
-import { GroupType } from "../../Types/Type";
-export default function GroupDetails({ group }: { group: GroupType }) {
+import { GroupWithObjects } from "../../Types/Type";
+
+export default function GroupDetails({ group }: { group: GroupWithObjects }) {
   return (
     <section className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -36,7 +37,7 @@ export default function GroupDetails({ group }: { group: GroupType }) {
         <div className="space-y-2">
           <div className="text-sm text-gray-500">Working Days</div>
           <div className="flex flex-wrap gap-2">
-            {group?.workingDays.length ? (
+            {group?.workingDays && group.workingDays.length > 0 ? (
               group.workingDays.map((d) => (
                 <span
                   key={d}

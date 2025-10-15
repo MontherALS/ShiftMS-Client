@@ -16,7 +16,11 @@ export default function GroupSummary({ group }: { group: GroupWithObjects }) {
         <div className="flex items-center justify-between">
           <span className="text-gray-600">Working Days Count</span>
           <span className="font-medium text-gray-900">
-            {group.workingDays.length}
+            {group?.workingDays && group.workingDays.length > 0 ? (
+              group.workingDays.length
+            ) : (
+              <span className="text-gray-600">None</span>
+            )}
           </span>
         </div>
       </div>

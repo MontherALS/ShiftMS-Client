@@ -1,7 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { GroupType } from "../Types/Type";
-export default function GroupsCards({ groups }: { groups: GroupType[] }) {
+import { GroupWithObjects } from "../Types/Type";
+export default function GroupsCards({
+  groups,
+}: {
+  groups: GroupWithObjects[];
+}) {
   return (
     <div className="grid gap-6">
       {groups.map((group, i) => (
@@ -16,7 +20,7 @@ export default function GroupsCards({ groups }: { groups: GroupType[] }) {
             <p className="text-lg text-gray-600">
               Supervisor:{" "}
               {typeof group.supervisor !== "string"
-                ? group.supervisor.name
+                ? group.supervisor?.name
                 : "N/A"}
             </p>
           </div>
