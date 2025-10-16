@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { GroupType } from "../Types/Type";
-export default function GroupHeader({ group }: { group: GroupType }) {
+import { GroupWithObjects } from "../Types/Type";
+export default function GroupHeader({ group }: { group: GroupWithObjects }) {
   return (
     <div className="mb-8">
       <nav className="text-sm text-gray-500 mb-2">
