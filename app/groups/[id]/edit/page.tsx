@@ -130,7 +130,7 @@ export default function EditGroupPage() {
         return;
       }
 
-      router.push("/dashboard?refresh=true"); // ✅ هذا السطر هو المفتاح
+      router.push("/dashboard?refresh=true");
     } catch (error) {
       console.error("Error updating group:", error);
     }

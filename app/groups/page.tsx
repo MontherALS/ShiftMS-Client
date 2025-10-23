@@ -5,9 +5,9 @@ import NavBar from "../components/NavBar";
 import AddGroupModal from "./AddGroupModal";
 import GroupsCards from "./GroupsCards";
 import { GroupWithObjects } from "../Types/Type";
+
 export default function GroupsPage() {
   const [groups, setGroups] = useState<GroupWithObjects[]>([]);
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -35,25 +35,41 @@ export default function GroupsPage() {
       />
 
       <div
-        className={`min-h-screen bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] p-6 transition-all duration-300 ${
-          isModalOpen
-            ? " bg-gray-500 blur-lg pointer-events-none select-none"
-            : ""
+        className={`min-h-screen bg-gray-50 transition-all duration-300 ${
+          isModalOpen ? "blur-sm pointer-events-none" : ""
         }`}
       >
         <NavBar />
 
-        <div className="max-w-6xl mx-auto space-y-10">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-            <h1 className="text-4xl font-bold text-gray-800 text-center sm:text-left">
-              Groups Managment
-            </h1>
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div>
+              <h1 className="text-3xl font-semibold text-gray-900 mb-1">
+                Groups Management
+              </h1>
+              <p className="text-gray-600 text-sm">
+                Manage your groups and team members
+              </p>
+            </div>
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 sm:mt-0 bg-white border-2 border-gray-300 hover:border-blue-400 px-6 py-2 text-lg font-medium rounded-lg hover:bg-blue-50 transition-all duration-200 text-gray-700"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 shadow-sm"
             >
-              + Add New Group
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Add New Group
             </button>
           </div>
 

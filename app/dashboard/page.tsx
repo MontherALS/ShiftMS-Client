@@ -62,11 +62,11 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 p-3 sm:p-6">
       <NavBar />
 
-      <main className="max-w-6xl mx-auto space-y-6">
-        <span className="text-gray-600 text-sm font-medium mb-4 ml-5 block">
+      <main className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
+        <span className="text-gray-600 text-xs sm:text-sm font-medium mb-2 sm:mb-4 ml-2 sm:ml-5 block">
           {new Date().toLocaleDateString("en-US", {
             weekday: "long",
             year: "numeric",
@@ -77,17 +77,17 @@ export default function DashboardPage() {
 
         <Calendar groups={groups} />
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-4 sm:mt-8">
           <CurrentShift current={current} />
           <NextShift next={next} />
         </section>
 
-        <section className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-lg transition">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">
+        <section className="rounded-lg border border-gray-200 bg-white p-4 sm:p-6 shadow-md hover:shadow-lg transition">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800">
               Current Employees
             </h2>
-            <span className="text-sm text-gray-500">
+            <span className="text-xs sm:text-sm text-gray-500">
               Count: {employees.length}
             </span>
           </div>

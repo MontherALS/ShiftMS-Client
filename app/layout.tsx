@@ -11,11 +11,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Shift Managment System",
-  description: "A smart platform for managing employee shifts and group using",
+  title: "ShiftMS - Smart Shift Management",
+  description: "A smart platform for managing employee shifts and groups.",
+
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body

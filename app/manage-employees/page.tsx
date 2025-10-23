@@ -17,7 +17,7 @@ export default function ManageEmployeesPage() {
         <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2">
           <Link
             href="/manage-employees/add"
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-1 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
+            className="group relative overflow-hidden rounded-2xl hover:bg-blue-500 duration-1000 p-1 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
           >
             <div className="h-full w-full rounded-2xl bg-white p-8 transition-colors duration-300 group-hover:bg-white/90">
               <div className="flex items-center justify-between mb-6">
@@ -41,7 +41,7 @@ export default function ManageEmployeesPage() {
 
           <Link
             href="/manage-employees/delete"
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-600 to-red-600 p-1 shadow-lg focus:outline-none focus:ring-4 focus:ring-rose-300"
+            className="group relative overflow-hidden rounded-2xl p-1 hover:bg-red-500 duration-1000 shadow-lg focus:outline-none focus:ring-4 focus:ring-rose-300"
           >
             <div className="h-full w-full rounded-2xl bg-white p-8 transition-colors duration-300 group-hover:bg-white/90">
               <div className="flex items-center justify-between mb-6">
