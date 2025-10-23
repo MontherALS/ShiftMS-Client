@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import AddGroupModal from "./AddGroupModal";
 import GroupsCards from "./GroupsCards";
-import { GroupType } from "../Types/Type";
+import { GroupWithObjects } from "../Types/Type";
 export default function GroupsPage() {
-  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [groups, setGroups] = useState<GroupWithObjects[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -18,7 +18,7 @@ export default function GroupsPage() {
           console.error("Failed to fetch groups");
           return;
         }
-        const data: GroupType[] = await res.json();
+        const data: GroupWithObjects[] = await res.json();
         setGroups(data);
       } catch (error) {
         console.error("Error fetching groups:", error);

@@ -1,10 +1,12 @@
-export function filterShiftsByDay(shifts, today) {
+import { GroupWithObjects } from "../app/Types/Type";
+
+export function filterShiftsByDay(shifts: GroupWithObjects[], today: string) {
   const filteredShifts = shifts.filter((s) => s.workingDays.includes(today));
   return filteredShifts;
 }
 
 //
-function normalizeShift(shift) {
+function normalizeShift(shift: GroupWithObjects) {
   const start = toToday(shift.shiftStart);
   const end = toToday(shift.shiftEnd);
 
@@ -12,28 +14,32 @@ function normalizeShift(shift) {
   return { ...shift, _start: start, _end: end };
 }
 
-function toToday(hhmm) {
+function toToday(hhmm: string) {
   const [hours, minutes] = hhmm.split(":").map(Number);
   const today = new Date();
   today.setHours(hours, minutes, 0, 0);
   return today;
 }
 
-export function getCurrentAndNextShift(shifts, now) {
+export function getCurrentAndNextShift(shifts: GroupWithObjects[], now: Date) {
   const sortedShifts = (Array.isArray(shifts) ? shifts : [])
     .map((s) => normalizeShift(s))
-    .sort((a, b) => a._start - b._start); //N
+    .sort((a, b) => {
+      const startA = a._start ? a._start.getTime() : 0;
+      const startB = b._start ? b._start.getTime() : 0;
+      return startA - startB;
+    });
 
-  const currentShifts = sortedShifts.filter(
-    (e) => now >= e._start && now < e._end
-  );
+  const currentShifts = sortedShifts.filter((e) => {
+    if (!e._start || !e._end) return false;
+    return now >= e._start && now < e._end;
+  });
 
-  let nextShifts;
-  console.log(currentShifts);
+  let nextShifts: GroupWithObjects[] = [];
   if (currentShifts.length > 0) {
     nextShifts = sortedShifts.filter(
       (s) => s._start >= now && !currentShifts.includes(s)
-    ); //N
+    );
   } else {
     nextShifts = sortedShifts.filter((s) => s._start > now);
   }

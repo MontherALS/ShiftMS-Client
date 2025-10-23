@@ -21,7 +21,6 @@ export default function HomeNav() {
       <div className="absolute top-20 right-10 w-72 h-72 bg-purple-200/30 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl"></div>
 
-      {/* Navbar */}
       <nav className="relative z-50 bg-white/10 backdrop-blur-md border-b border-gray-200/50 text-gray-800 flex justify-between items-center px-6 py-4 shadow-lg">
         <div className="flex gap-3 items-center">
           <div className="p-1  rounded-xl">
@@ -54,7 +53,6 @@ export default function HomeNav() {
         </button>
       </nav>
 
-      {/* Sidebar */}
       {navIsOpen && (
         <aside className="bg-white/60 backdrop-blur-md shadow-2xl border border-gray-200/50 w-64 rounded-2xl p-8 flex flex-col gap-4 z-100 translate-x-45 translate-y-22  absolute animate-in slide-in-from-right duration-300">
           {navigationsTaps.map((t, i) => (

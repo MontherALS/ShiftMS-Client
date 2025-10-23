@@ -7,15 +7,15 @@ import CurrentShift from "./CurrentShift";
 import NextShift from "./NextShift";
 import ShiftEmployees from "./ShiftEmployees";
 import Calendar from "../groups/Calendar";
-//logic
+
 import { getCurrentAndNextShift, filterShiftsByDay } from "../../lib/shifts";
-import { GroupType, EmployeeType } from "../Types/Type";
+import { GroupWithObjects, EmployeeType } from "../Types/Type";
 
 export default function DashboardPage() {
   //*State's
   const [now, setNow] = useState<Date>(new Date());
 
-  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [groups, setGroups] = useState<GroupWithObjects[]>([]);
 
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
       if (!res.ok) return;
 
-      const data: GroupType[] = await res.json();
+      const data: GroupWithObjects[] = await res.json();
       setGroups(data);
     };
     fetchGroups();
@@ -49,11 +49,12 @@ export default function DashboardPage() {
       const filteredEmployees = data.filter((e) =>
         current.some((shift) => e.group?._id == shift._id)
       );
+
       setEmployees(filteredEmployees);
     };
 
     fetchEmployees();
-  }, [current]);
+  }, [current, groups]);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 3000);
@@ -62,10 +63,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 p-6">
-      {/* Navigation */}
       <NavBar />
 
-      {/* Main Content */}
       <main className="max-w-6xl mx-auto space-y-6">
         <span className="text-gray-600 text-sm font-medium mb-4 ml-5 block">
           {new Date().toLocaleDateString("en-US", {

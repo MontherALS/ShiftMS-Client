@@ -1,6 +1,6 @@
 import React from "react";
-import { GroupType } from "../Types/Type";
-export default function NextShift({ next }: { next: GroupType[] }) {
+import { GroupWithObjects } from "../Types/Type";
+export default function NextShift({ next }: { next: GroupWithObjects[] }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
       <h1 className="text-lg font-semibold text-gray-800">Next Shifts</h1>

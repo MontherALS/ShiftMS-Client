@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import MyNav from "../components/NavBar";
 export default function HelpPage() {
   return (

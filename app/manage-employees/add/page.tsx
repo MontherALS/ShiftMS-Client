@@ -5,17 +5,22 @@ import NavBar from "../../components/NavBar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { GroupType, EmployeeType } from "../../Types/Type";
+import {
+  GroupWithObjects,
+  AddEmployeeFormData,
+  EmployeeType,
+} from "../../Types/Type";
 export default function AddEmployeePage() {
   const router = useRouter();
 
-  const [formData, setFormData] = useState<EmployeeType>({
+  const [formData, setFormData] = useState<AddEmployeeFormData>({
+    _id: "",
     name: "",
     phone: "",
     email: "",
-    group: null,
+    groupId: "",
   });
-  const [groups, setGroups] = useState<GroupType[]>([]);
+  const [groups, setGroups] = useState<GroupWithObjects[]>([]);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
@@ -27,7 +32,7 @@ export default function AddEmployeePage() {
           setMessage(errorData.message);
           return;
         }
-        const data: GroupType[] = await res.json();
+        const data: GroupWithObjects[] = await res.json();
         setGroups(data);
         console.log("Fetched groups:", data);
       } catch (error) {

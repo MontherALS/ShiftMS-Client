@@ -2,9 +2,16 @@ export type LoginFormData = {
   email: string;
   password: string;
 };
+export type AddEmployeeFormData = {
+  _id?: string;
+  name: string;
+  phone: string;
+  email: string;
+  groupId: string;
+};
 
 export type EmployeeType = {
-  _id: string;
+  _id?: string;
   name: string;
   phone: string;
   email: string;

@@ -13,10 +13,8 @@ export default function EditGroupPage() {
   const { id } = useParams();
   const router = useRouter();
 
-  // group الحقيقي من السيرفر (كائنات كاملة)
   const [group, setGroup] = useState<GroupWithObjects | null>(null);
 
-  // البيانات المعدلة بالفورم (IDs فقط)
   const [formData, setFormData] = useState<GroupWithIds>({
     name: "",
     workingDays: [],
@@ -30,7 +28,6 @@ export default function EditGroupPage() {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    // جلب بيانات المجموعة
     const fetchGroupData = async () => {
       try {
         const res = await fetch(`http://localhost:5000/groups/${id}`);
@@ -42,10 +39,8 @@ export default function EditGroupPage() {
 
         const data: GroupWithObjects = await res.json();
 
-        // خزّن البيانات الأصلية
         setGroup(data);
 
-        // حولها للفورم (IDs فقط)
         setFormData({
           name: data.name || "",
           workingDays: Array.isArray(data.workingDays) ? data.workingDays : [],
@@ -53,7 +48,9 @@ export default function EditGroupPage() {
           shiftEnd: data.shiftEnd || "",
           supervisor: data.supervisor?._id || "",
           employees: Array.isArray(data.employees)
-            ? data.employees.map((emp) => emp._id)
+            ? data.employees.map((emp) =>
+                typeof emp._id === "string" ? emp._id : ""
+              )
             : [],
         });
       } catch (error) {
@@ -61,7 +58,6 @@ export default function EditGroupPage() {
       }
     };
 
-    // جلب قائمة الموظفين
     const fetchEmployees = async () => {
       try {
         const res = await fetch("http://localhost:5000/employees");
@@ -82,7 +78,6 @@ export default function EditGroupPage() {
     fetchGroupData();
   }, [id]);
 
-  // تحديث الحقول العادية
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
@@ -93,7 +88,6 @@ export default function EditGroupPage() {
     }));
   }
 
-  // تحديث الـ checkbox
   function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { checked, value, name } = e.target;
 
@@ -107,6 +101,7 @@ export default function EditGroupPage() {
         workingDays: updatedDays,
       }));
     } else if (name === "employees") {
+      console.log("Checkbox value:", value, "Checked:", checked);
       const updatedEmployees = checked
         ? [...formData.employees, value]
         : formData.employees.filter((emp) => emp !== value);
@@ -118,7 +113,6 @@ export default function EditGroupPage() {
     }
   }
 
-  // إرسال الفورم (تحديث المجموعة)
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -136,13 +130,12 @@ export default function EditGroupPage() {
         return;
       }
 
-      router.push(`/groups/${id}`);
+      router.push("/dashboard?refresh=true"); // ✅ هذا السطر هو المفتاح
     } catch (error) {
       console.error("Error updating group:", error);
     }
   }
 
-  // حذف المجموعة
   const handleDeleteGroup = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this group?"
@@ -166,7 +159,6 @@ export default function EditGroupPage() {
     }
   };
 
-  // التجهيز لتمرير الـ props
   const props = {
     formData,
     employees,
@@ -178,7 +170,6 @@ export default function EditGroupPage() {
     handleDeleteGroup,
   };
 
-  // شاشة تحميل
   if (!group) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center bg-gray-50">

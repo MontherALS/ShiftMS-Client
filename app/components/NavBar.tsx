@@ -12,7 +12,6 @@ export default function NavBar() {
     <header className="bg-white shadow-sm rounded-xl py-5 px-2 max-w-4xl mx-auto mb-8 flex items-center justify-between ">
       <Image src={logo} width={45} alt="logo" />
 
-      {/* Navigation Links */}
       <nav className="flex gap-2 items-center text-[13px] ">
         <Link href="/dashboard" className={linkStyle}>
           Dashboard

@@ -1,8 +1,12 @@
 import React from "react";
 import Countdown from "react-countdown";
-import { GroupType } from "../Types/Type";
+import { GroupWithObjects } from "../Types/Type";
 
-export default function CurrentShift({ current }: { current: GroupType[] }) {
+export default function CurrentShift({
+  current,
+}: {
+  current: GroupWithObjects[];
+}) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:shadow-xl transition">
       <h1 className="text-lg font-semibold text-gray-800">Current Shifts</h1>
