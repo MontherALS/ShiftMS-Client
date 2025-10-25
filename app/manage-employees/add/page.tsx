@@ -17,16 +17,20 @@ export default function AddEmployeePage() {
     _id: "",
     name: "",
     phone: "",
-    email: "",
     groupId: "",
   });
   const [groups, setGroups] = useState<GroupWithObjects[]>([]);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const fetchGroups = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups`);
+        const res = await fetch(`http://localhost:5000/groups`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
           const errorData = await res.json();
           setMessage(errorData.message);
@@ -53,11 +57,13 @@ export default function AddEmployeePage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const token = localStorage.getItem("token");
     e.preventDefault();
 
     const res = await fetch("http://localhost:5000/employees", {
       method: "POST",
       headers: {
+        authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
@@ -115,25 +121,6 @@ export default function AddEmployeePage() {
               name="phone"
               className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="+966xxxxxxxxx"
-              required
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email || ""}
-              onChange={handleChange}
-              name="email"
-              className="w-full px-3 py-2 border text-gray-500 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter email address"
               required
             />
           </div>

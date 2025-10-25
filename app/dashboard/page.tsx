@@ -28,8 +28,17 @@ export default function DashboardPage() {
   const { current, next } = getCurrentAndNextShift(todayShifts, now);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+
     const fetchGroups = async () => {
-      const res = await fetch(`http://localhost:5000/groups`);
+      const res = await fetch(`http://localhost:5000/groups`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) return;
 
@@ -41,9 +50,17 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      const res = await fetch("http://localhost:5000/employees");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "/login";
+      }
+      const res = await fetch("http://localhost:5000/employees", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      if (!res.ok) return console.error("Cant fetch employees", res.statusText);
+      if (!res.ok) return console.log("Cant fetch employees", res.statusText);
       const data: EmployeeType[] = await res.json();
 
       const filteredEmployees = data.filter((e) =>

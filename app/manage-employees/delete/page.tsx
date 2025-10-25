@@ -7,8 +7,16 @@ export default function DeleteEmployeePage() {
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
     const fetchEmployees = async () => {
-      const res = await fetch("http://localhost:5000/employees");
+      const res = await fetch("http://localhost:5000/employees", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) {
         console.error("Failed to fetch employees", res.statusText);
@@ -23,8 +31,9 @@ export default function DeleteEmployeePage() {
   }, []);
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const id: string = e.currentTarget.value;
-
+    const token = localStorage.getItem("token");
     const confirm: boolean = window.confirm(
       "Are you sure you want to delete this employee with ID:" + id
     );
@@ -33,6 +42,9 @@ export default function DeleteEmployeePage() {
 
     const res = await fetch(`http://localhost:5000/employees/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     if (!res.ok) {
       console.error("Failed to delete employee", res.statusText);

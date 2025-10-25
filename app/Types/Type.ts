@@ -1,12 +1,12 @@
-export type LoginFormData = {
+export type AuthFormData = {
   email: string;
   password: string;
+  confirmPassword?: string;
 };
 export type AddEmployeeFormData = {
   _id?: string;
   name: string;
   phone: string;
-  email: string;
   groupId: string;
 };
 

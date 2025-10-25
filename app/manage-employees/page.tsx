@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import NavBar from "../components/NavBar";
-
 export default function ManageEmployeesPage() {
   return (
     <div className="min-h-screen">

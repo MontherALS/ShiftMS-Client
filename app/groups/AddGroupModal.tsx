@@ -29,8 +29,13 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const getEmployees = async () => {
-      const res = await fetch("http://localhost:5000/employees");
+      const res = await fetch("http://localhost:5000/employees", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) {
         setMessage("Failed to fetch employees");
@@ -67,11 +72,13 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const token = localStorage.getItem("token");
     e.preventDefault();
     const res = await fetch("http://localhost:5000/groups", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(groupForm),
     });

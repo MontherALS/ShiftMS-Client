@@ -28,9 +28,14 @@ export default function EditGroupPage() {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const fetchGroupData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups/${id}`);
+        const res = await fetch(`http://localhost:5000/groups/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
           const errorData = await res.json();
           setMessage(errorData.message);
@@ -59,8 +64,13 @@ export default function EditGroupPage() {
     };
 
     const fetchEmployees = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const res = await fetch("http://localhost:5000/employees");
+        const res = await fetch("http://localhost:5000/employees", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
           const errorData = await res.json();
           setMessage(errorData.message);
@@ -114,11 +124,13 @@ export default function EditGroupPage() {
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const token = localStorage.getItem("token");
     e.preventDefault();
     try {
       const res = await fetch(`http://localhost:5000/groups/${id}`, {
         method: "PUT",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
@@ -137,6 +149,7 @@ export default function EditGroupPage() {
   }
 
   const handleDeleteGroup = async () => {
+    const token = localStorage.getItem("token");
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this group?"
     );
@@ -145,6 +158,9 @@ export default function EditGroupPage() {
     try {
       const res = await fetch(`http://localhost:5000/groups/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!res.ok) {

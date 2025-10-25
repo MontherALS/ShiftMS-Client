@@ -1,62 +1,54 @@
 "use client";
 import React from "react";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AuthFormData } from "../Types/Type";
 import HomeNav from "../components/HomeNav";
-import { AuthFormData } from "../Types/Type.js";
+export default function SignupPage() {
+  const router = useRouter();
 
-export default function LoginPage() {
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [message, setMessage] = useState<string>("");
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  }
+  };
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    setMessage("");
 
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("http://localhost:5000/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
-
       if (!res.ok) {
-        const errorData: { message: string } = await res.json();
-        setMessage(errorData.message);
-        return;
+        throw new Error("Failed to sign up");
       }
-
-      const data: { token: string } = await res.json();
-
-      if (!data.token) {
-        setMessage("Login failed. Please try again.");
-        return;
-      }
-      localStorage.setItem("token", data.token);
-      window.location.href = "/dashboard";
+      router.push("/login");
     } catch (error) {
-      setMessage("Network error. Please try again.");
-    } finally {
-      setIsLoading(false);
+      setMessage("An error occurred. Please try again.");
     }
-  }
+  };
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
@@ -93,7 +85,6 @@ export default function LoginPage() {
                 placeholder="Enter your email"
                 className="w-full p-3 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
-                disabled={isLoading}
               />
             </div>
 
@@ -113,29 +104,32 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 className="w-full p-3 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 required
-                disabled={isLoading}
               />
             </div>
-
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                type="password"
+                name="confirmPassword"
+                placeholder="Enter your password"
+                className="w-full p-3 border text-gray-700 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                required
+              />
+            </div>
             <button
               type="submit"
-              disabled={isLoading}
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-lg"
             >
-              {isLoading ? "Logging in..." : "Log In"}
+              Sign Up
             </button>
-
-            <div className="text-center pt-4 border-t border-gray-200">
-              <span className="text-gray-600 text-sm">
-                Don't have an account?{" "}
-              </span>
-              <Link
-                href="/signup"
-                className="text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
-              >
-                Sign up here
-              </Link>
-            </div>
           </form>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import HomeNav from "./components/HomeNav";
+//TODO ADD .ENV VARIABLES
 
 export default function Home() {
   return (

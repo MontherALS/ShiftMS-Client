@@ -11,17 +11,22 @@ export default function GroupsPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const fetchGroups = async () => {
       try {
-        const res = await fetch("http://localhost:5000/groups");
+        const res = await fetch("http://localhost:5000/groups", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
-          console.error("Failed to fetch groups");
+          console.log("Failed to fetch groups");
           return;
         }
         const data: GroupWithObjects[] = await res.json();
         setGroups(data);
       } catch (error) {
-        console.error("Error fetching groups:", error);
+        console.log("Error fetching groups:", error);
       }
     };
     fetchGroups();

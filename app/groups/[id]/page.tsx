@@ -16,17 +16,22 @@ export default function EditGroupPage() {
   const [group, setGroup] = useState<GroupWithObjects>({} as GroupWithObjects);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     const fetchGroup = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups/${id}`);
+        const res = await fetch(`http://localhost:5000/groups/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        if (!res.ok) return console.error("Failed to fetch group");
+        if (!res.ok) return console.log("Failed to fetch group");
 
         const data: GroupWithObjects = await res.json();
 
         setGroup(data);
       } catch (e: any) {
-        console.error(e.message);
+        console.log(e.message);
       }
     };
     fetchGroup();
