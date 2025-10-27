@@ -30,7 +30,6 @@ export default function EditGroupDetails({
 }: PropType) {
   return (
     <div className="max-w-6xl mx-auto px-4">
-      {/* Header */}
       <div className="mb-8">
         <nav className="text-sm text-gray-500 mb-2">
           <a href="/dashboard" className="hover:text-gray-700">
@@ -64,16 +63,13 @@ export default function EditGroupDetails({
         </div>
       </div>
 
-      {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Form: Group Details */}
         <section className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Group Details
           </h2>
           <span className="text-red-500 mb-4">{message}</span>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Group Name */}
             <div>
               <label
                 htmlFor="groupName"
@@ -92,7 +88,6 @@ export default function EditGroupDetails({
               />
             </div>
 
-            {/* Supervisor */}
             <div>
               <label
                 htmlFor="supervisor"
@@ -120,7 +115,6 @@ export default function EditGroupDetails({
               </select>
             </div>
 
-            {/* Shift Times */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label
@@ -156,7 +150,6 @@ export default function EditGroupDetails({
               </div>
             </div>
 
-            {/* Working Days */}
             <div>
               <div className="block text-sm font-medium text-gray-700 mb-2">
                 Working Days
@@ -208,7 +201,6 @@ export default function EditGroupDetails({
           </form>
         </section>
 
-        {/* Summary */}
         <aside className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
           <div className="space-y-4">

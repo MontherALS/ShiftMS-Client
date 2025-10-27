@@ -2,24 +2,16 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import { EmployeeType } from "../../Types/Type";
-
+import { authFetch } from "../../../lib/authFetch";
 export default function DeleteEmployeePage() {
   const [employees, setEmployees] = useState<EmployeeType[]>([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      window.location.href = "/login";
-    }
     const fetchEmployees = async () => {
-      const res = await fetch("http://localhost:5000/employees", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await authFetch("http://localhost:5000/employees");
 
-      if (!res.ok) {
-        console.error("Failed to fetch employees", res.statusText);
+      if (!res) {
+        console.error("Failed to fetch employees");
         return;
       }
 
@@ -40,14 +32,11 @@ export default function DeleteEmployeePage() {
 
     if (!confirm) return;
 
-    const res = await fetch(`http://localhost:5000/employees/${id}`, {
+    const res = await authFetch(`http://localhost:5000/employees/${id}`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
-    if (!res.ok) {
-      console.error("Failed to delete employee", res.statusText);
+    if (!res) {
+      console.error("Failed to delete employee");
       return;
     }
     const updatedEmployees = employees.filter(

@@ -2,6 +2,7 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { authFetch } from "../../../lib/authFetch";
 
 import { GroupWithObjects } from "../../Types/Type";
 //Components
@@ -16,16 +17,11 @@ export default function EditGroupPage() {
   const [group, setGroup] = useState<GroupWithObjects>({} as GroupWithObjects);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const fetchGroup = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await authFetch(`http://localhost:5000/groups/${id}`);
 
-        if (!res.ok) return console.log("Failed to fetch group");
+        if (!res) return console.log("Failed to fetch group");
 
         const data: GroupWithObjects = await res.json();
 

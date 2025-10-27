@@ -1,27 +1,26 @@
 "use client";
 import Link from "next/link";
 import HomeNav from "./components/HomeNav";
+
 //TODO ADD .ENV VARIABLES
+
+//TODO FIX BUG (CANT ADD EMPLOYEES)
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-blue-50">
       <HomeNav />
 
-      {/* Main Content */}
       <div className="flex flex-col items-center justify-center px-4 py-20">
-        {/* Title */}
         <h1 className="text-5xl font-bold text-blue-900 text-center mb-6">
           ShiftMS- Your Team Shift Manager
         </h1>
 
-        {/* Subtitle */}
         <p className="text-xl text-gray-600 text-center max-w-2xl mb-12">
           Simple and easy way to manage your team shifts. Schedule, track, and
           organize all in one place.
         </p>
 
-        {/* Buttons */}
         <div className="flex gap-4">
           <Link
             href="/login"
@@ -38,12 +37,10 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Features Section */}
         <div
           id="features"
           className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl"
         >
-          {/* Feature 1 */}
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <div className="text-4xl mb-4">📅</div>
             <h3 className="text-xl font-semibold text-gray-800 mb-3">
@@ -54,7 +51,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Feature 2 */}
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <div className="text-4xl mb-4">👥</div>
             <h3 className="text-xl font-semibold text-gray-800 mb-3">
@@ -65,7 +61,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Feature 3 */}
           <div className="bg-white p-6 rounded-lg shadow-md text-center">
             <div className="text-4xl mb-4">🖥️</div>
             <h3 className="text-xl font-semibold text-gray-800 mb-3">
@@ -78,7 +73,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-8 mt-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex justify-center gap-8 mb-4">

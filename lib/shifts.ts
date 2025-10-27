@@ -5,7 +5,6 @@ export function filterShiftsByDay(shifts: GroupWithObjects[], today: string) {
   return filteredShifts;
 }
 
-//
 function normalizeShift(shift: GroupWithObjects) {
   const start = toToday(shift.shiftStart);
   const end = toToday(shift.shiftEnd);

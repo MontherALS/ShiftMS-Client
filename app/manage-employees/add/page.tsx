@@ -10,6 +10,7 @@ import {
   AddEmployeeFormData,
   EmployeeType,
 } from "../../Types/Type";
+import { authFetch } from "../../../lib/authFetch";
 export default function AddEmployeePage() {
   const router = useRouter();
 
@@ -23,21 +24,18 @@ export default function AddEmployeePage() {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const fetchGroups = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          const errorData = await res.json();
-          setMessage(errorData.message);
+        const res = await authFetch(`http://localhost:5000/groups`);
+        if (!res) {
+          console.log("Failed to fetch groups");
           return;
         }
+
         const data: GroupWithObjects[] = await res.json();
+
         setGroups(data);
+
         console.log("Fetched groups:", data);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -57,30 +55,35 @@ export default function AddEmployeePage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = localStorage.getItem("token");
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/employees", {
+    const res = await authFetch("http://localhost:5000/employees", {
       method: "POST",
-      headers: {
-        authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
+
       body: JSON.stringify(formData),
     });
-    if (!res.ok) {
+    if (res?.status === 400) {
       const errorData: { message: string } = await res.json();
 
       setMessage(errorData.message);
       return;
     }
+    if (!res) {
+      console.log("Failed to add employee");
+      return;
+    }
+
     const data: EmployeeType = await res.json();
+
     console.log("Employee added:", data);
+
     router.push("/dashboard");
   };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <NavBar />
+
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Add New Employee

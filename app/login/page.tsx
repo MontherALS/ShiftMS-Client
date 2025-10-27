@@ -50,6 +50,7 @@ export default function LoginPage() {
         return;
       }
       localStorage.setItem("token", data.token);
+
       window.location.href = "/dashboard";
     } catch (error) {
       setMessage("Network error. Please try again.");

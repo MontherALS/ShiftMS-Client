@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { authFetch } from "../../lib/authFetch";
+
 import NavBar from "../components/NavBar";
 import AddGroupModal from "./AddGroupModal";
 import GroupsCards from "./GroupsCards";
@@ -8,22 +10,18 @@ import { GroupWithObjects } from "../Types/Type";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<GroupWithObjects[]>([]);
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const fetchGroups = async () => {
       try {
-        const res = await fetch("http://localhost:5000/groups", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          console.log("Failed to fetch groups");
-          return;
-        }
+        const res = await authFetch("http://localhost:5000/groups");
+
+        if (!res) return console.log("Cant fetch groups");
+
         const data: GroupWithObjects[] = await res.json();
+
         setGroups(data);
       } catch (error) {
         console.log("Error fetching groups:", error);

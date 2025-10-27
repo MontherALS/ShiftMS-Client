@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { EmployeeType } from "../Types/Type";
-
+import { authFetch } from "../../lib/authFetch";
 type AddGroupModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -29,20 +29,13 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const getEmployees = async () => {
-      const res = await fetch("http://localhost:5000/employees", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await authFetch("http://localhost:5000/employees");
 
-      if (!res.ok) {
-        setMessage("Failed to fetch employees");
-        console.error("Failed to fetch employees:", res.statusText);
-        return;
-      }
+      if (!res) return console.log("Cant fetch employees");
+
       const data: EmployeeType[] = await res.json();
+
       setEmployees(data);
     };
     getEmployees();
@@ -72,20 +65,22 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    const token = localStorage.getItem("token");
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/groups", {
+    const res = await authFetch("http://localhost:5000/groups", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+
       body: JSON.stringify(groupForm),
     });
-    if (!res.ok) {
-      const errorData: { message: string } = await res.json();
-      setMessage(errorData.message || "Failed to submit group form");
-      console.log("Failed to submit group form:", res.statusText);
+
+    if (res?.status === 400) {
+      const data = await res.json();
+
+      setMessage(data.message);
+
+      return;
+    }
+    if (!res) {
+      console.log("Failed to submit group form");
       return;
     }
 
@@ -98,6 +93,7 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
     });
     onClose();
   };
+
   if (!isOpen) return null;
 
   return (

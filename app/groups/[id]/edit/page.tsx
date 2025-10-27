@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import AddMembers from "./AddMembers";
 import EditGroupDetails from "./EditGroupDetails";
+import { authFetch } from "../../../../lib/authFetch";
+
 import {
   GroupWithIds,
   GroupWithObjects,
@@ -28,17 +30,12 @@ export default function EditGroupPage() {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const fetchGroupData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/groups/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          const errorData = await res.json();
-          setMessage(errorData.message);
+        const res = await authFetch(`http://localhost:5000/groups/${id}`);
+
+        if (!res) {
+          console.log("Failed to fetch group data");
           return;
         }
 
@@ -64,20 +61,16 @@ export default function EditGroupPage() {
     };
 
     const fetchEmployees = async () => {
-      const token = localStorage.getItem("token");
       try {
-        const res = await fetch("http://localhost:5000/employees", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!res.ok) {
-          const errorData = await res.json();
-          setMessage(errorData.message);
+        const res = await authFetch("http://localhost:5000/employees");
+
+        if (!res) {
+          console.log("Failed to fetch employees");
           return;
         }
 
         const data: EmployeeType[] = await res.json();
+
         setEmployees(data);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -124,21 +117,16 @@ export default function EditGroupPage() {
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    const token = localStorage.getItem("token");
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:5000/groups/${id}`, {
+      const res = await authFetch(`http://localhost:5000/groups/${id}`, {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        setMessage(errorData.message);
+      if (!res) {
+        console.log("Failed to update group");
         return;
       }
 
@@ -156,16 +144,12 @@ export default function EditGroupPage() {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/groups/${id}`, {
+      const res = await authFetch(`http://localhost:5000/groups/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        setMessage(errorData.message);
+      if (!res) {
+        console.log("Failed to delete group");
         return;
       }
 

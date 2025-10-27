@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useEffect, useState } from "react";
+import { authFetch } from "../../lib/authFetch";
 //components
 import NavBar from "../components/NavBar";
 import CurrentShift from "./CurrentShift";
@@ -29,18 +30,19 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       window.location.href = "/login";
     }
 
     const fetchGroups = async () => {
-      const res = await fetch(`http://localhost:5000/groups`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await authFetch(`http://localhost:5000/groups`);
 
-      if (!res.ok) return;
+      if (!res) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+        return;
+      }
 
       const data: GroupWithObjects[] = await res.json();
       setGroups(data);
@@ -51,16 +53,15 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchEmployees = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
         window.location.href = "/login";
       }
-      const res = await fetch("http://localhost:5000/employees", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
 
-      if (!res.ok) return console.log("Cant fetch employees", res.statusText);
+      const res = await authFetch("http://localhost:5000/employees");
+
+      if (!res) return console.log("Cant fetch employees");
+
       const data: EmployeeType[] = await res.json();
 
       const filteredEmployees = data.filter((e) =>
