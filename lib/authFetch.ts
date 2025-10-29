@@ -19,7 +19,6 @@ export const authFetch = async (
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log("authFetch response status:", res.status);
 
   if (res.status === 401 && !isRetry) {
     console.log("Access token expired, attempting to refresh...");
