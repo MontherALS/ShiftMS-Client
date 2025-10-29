@@ -63,9 +63,9 @@ export default function AddEmployeePage() {
       body: JSON.stringify(formData),
     });
     if (res?.status === 400) {
-      const errorData: { message: string } = await res.json();
+      const data = await res.json();
 
-      setMessage(errorData.message);
+      setMessage(data.errors[0].msg);
       return;
     }
     if (!res) {

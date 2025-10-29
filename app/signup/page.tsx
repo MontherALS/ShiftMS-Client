@@ -26,27 +26,28 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match.");
-      return;
-    }
     try {
       const res = await fetch("http://localhost:5000/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+        body: JSON.stringify(formData),
       });
       if (!res.ok) {
-        throw new Error("Failed to sign up");
+        const data = await res.json();
+
+        if (data.errors && data.errors.length > 0) {
+          setMessage(data.errors[0].msg);
+        } else {
+          setMessage("Failed to sign up");
+        }
+        return;
       }
       router.push("/login");
     } catch (error) {
       setMessage("An error occurred. Please try again.");
+      console.log("Error during signup:", error);
     }
   };
 

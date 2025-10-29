@@ -20,11 +20,15 @@ export const authFetch = async (
     },
   });
   console.log("authFetch response status:", res.status);
+
   if (res.status === 401 && !isRetry) {
+    console.log("Access token expired, attempting to refresh...");
+
     const refreshRes = await fetch("http://localhost:5000/refresh-token", {
       method: "POST",
       credentials: "include",
     });
+
     console.log("authFetch response status:", refreshRes.status);
 
     if (refreshRes.ok) {

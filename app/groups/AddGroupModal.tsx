@@ -75,7 +75,7 @@ export default function AddGroupModal({ isOpen, onClose }: AddGroupModalProps) {
     if (res?.status === 400) {
       const data = await res.json();
 
-      setMessage(data.message);
+      setMessage(data.errors[0].msg);
 
       return;
     }

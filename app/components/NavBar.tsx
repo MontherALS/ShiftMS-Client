@@ -52,6 +52,7 @@ export default function NavBar() {
             <Link href="/help" className={linkStyle}>
               Help
             </Link>
+            <button className={linkStyle}>Language &#9662;</button>
           </nav>
 
           <button
