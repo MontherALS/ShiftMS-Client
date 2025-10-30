@@ -79,7 +79,6 @@ http://localhost:3000
 ```
 ---
 ## 🧑‍💻 Author
-**Kaz**  
-Full-Stack Developer (Learning & Building Every Day)  
+**MontherALS**  
 GitHub: [@MontherALS](https://github.com/MontherALS)
 
