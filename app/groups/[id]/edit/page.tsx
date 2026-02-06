@@ -5,11 +5,7 @@ import AddMembers from "./AddMembers";
 import EditGroupDetails from "./EditGroupDetails";
 import { authFetch } from "../../../../lib/authFetch";
 
-import {
-  GroupWithIds,
-  GroupWithObjects,
-  EmployeeType,
-} from "../../../Types/Type";
+import { GroupWithIds, GroupWithObjects, EmployeeType } from "../../../Types/Type";
 
 export default function EditGroupPage() {
   const { id } = useParams();
@@ -50,9 +46,7 @@ export default function EditGroupPage() {
           shiftEnd: data.shiftEnd || "",
           supervisor: data.supervisor?._id || "",
           employees: Array.isArray(data.employees)
-            ? data.employees.map((emp) =>
-                typeof emp._id === "string" ? emp._id : ""
-              )
+            ? data.employees.map((emp) => (typeof emp._id === "string" ? emp._id : ""))
             : [],
         });
       } catch (error) {
@@ -81,9 +75,7 @@ export default function EditGroupPage() {
     fetchGroupData();
   }, [id]);
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -118,17 +110,27 @@ export default function EditGroupPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    const payload: any = {
+      name: formData.name,
+      workingDays: formData.workingDays,
+      shiftStart: formData.shiftStart,
+      shiftEnd: formData.shiftEnd,
+    };
+
+    if (formData.supervisor) {
+      payload.supervisor = formData.supervisor;
+    }
+
+    payload.employees = formData.employees ?? [];
+
     try {
       const res = await authFetch(`http://localhost:5000/groups/${id}`, {
         method: "PUT",
-
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
-      if (!res) {
-        console.log("Failed to update group");
-        return;
-      }
+      if (!res) return;
 
       router.push("/dashboard?refresh=true");
     } catch (error) {
@@ -138,9 +140,7 @@ export default function EditGroupPage() {
 
   const handleDeleteGroup = async () => {
     const token = localStorage.getItem("token");
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this group?"
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this group?");
     if (!confirmDelete) return;
 
     try {
