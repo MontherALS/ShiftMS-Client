@@ -43,7 +43,7 @@ I’d really appreciate your insights
 - JWT Authentication
 - express-validator
   
-### 🖥️ Backend Repository
+### Backend Repository
 You can check the backend code here:  
 [ShiftMS Server Repository](https://github.com/MontherALS/ShiftMS-Server)
 
@@ -78,7 +78,7 @@ The app will be available at:
 http://localhost:3000
 ```
 ---
-## 🧑‍💻 Author
+## Author
 **MontherALS**  
 GitHub: [@MontherALS](https://github.com/MontherALS)
 
